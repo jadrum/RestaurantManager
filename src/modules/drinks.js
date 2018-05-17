@@ -2,6 +2,7 @@ export const INCREMENT_REQUESTED = 'counter/INCREMENT_REQUESTED';
 export const INCREMENT = 'counter/INCREMENT';
 export const ADD_DRINK = 'drink/ADD';
 export const REMOVE_DRINK = 'drink/REMOVE';
+export const UPDATE_DRINK = 'drink/UPDATE';
 
 const initialState = {
   drinks: {
@@ -24,6 +25,18 @@ export default (state = initialState, action) => {
       };
 
     case REMOVE_DRINK:
+      // remove = bject want to remove
+      // newDrinks = everything else
+      const { [action.name]: remove, ...newDrinks } = state.drinks;
+      return {
+        ...state,
+        drinks: {
+          ...newDrinks
+        }
+      };
+
+    case UPDATE_DRINK:
+      console.log('TO DO');
       return {
         ...state
       };
@@ -56,11 +69,22 @@ export const addDrink = data => {
   };
 };
 
-export const removeDrink = name => {
+export const removeDrink = data => {
   return dispatch => {
     dispatch({
       type: REMOVE_DRINK,
-      id: name
+      name: data
+    });
+  };
+};
+
+export const updateDrink = data => {
+  return dispatch => {
+    dispatch({
+      type: UPDATE_DRINK,
+      oldName: data.old,
+      newName: data.new,
+      newDesc: data.desc
     });
   };
 };

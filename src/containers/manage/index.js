@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import { push } from 'react-router-redux';
+//import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -22,42 +22,43 @@ class ManageDrinks extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.onNameChange = this.onNameChange.bind(this);
-    this.onDescChange = this.onDescChange.bind(this);
-
     this.state = {
       name: '',
       desc: ''
     };
   }
 
-  submitDrink = action => e => {
+  submitDrink = e => {
     e.preventDefault();
-    action({
+    this.props.addDrink({
       name: this.state.name,
       desc: this.state.desc
     });
+    this.setState({ name: '' });
+    this.setState({ desc: '' });
   };
 
-  onNameChange(e) {
+  onNameChange = e => {
     this.setState({ name: e.target.value });
-  }
+  };
 
-  onDescChange(e) {
+  onDescChange = e => {
     this.setState({ desc: e.target.value });
-  }
+  };
 
-  renderDrinks(drink, i) {
+  renderDrinks = (drink, i) => {
     return (
       <div className="comment" key={i}>
         <p>
           <strong>{drink.name}</strong>
           {drink.desc}
-          <button onClick={() => console.log(drink.name)}>Remove</button>
+          <button onClick={() => this.props.removeDrink(drink.name)}>
+            Remove
+          </button>
         </p>
       </div>
     );
-  }
+  };
 
   render() {
     let comp;
@@ -66,7 +67,7 @@ class ManageDrinks extends Component {
         <div>
           <h1>Drinks</h1>
 
-          <Form horizontal onSubmit={this.submitDrink(this.props.addDrink)}>
+          <Form horizontal onSubmit={this.submitDrink}>
             <FormGroup controlId="formName">
               <Col componentClass={ControlLabel} sm={2}>
                 Drink Name
@@ -123,8 +124,7 @@ const mapDispatchToProps = dispatch =>
       addDrink,
       removeDrink,
       increment,
-      incrementAsync,
-      changePage: () => push('/about-us')
+      incrementAsync
     },
     dispatch
   );
