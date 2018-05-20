@@ -3,20 +3,43 @@ import { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { removeDrink } from '../../modules/drinks';
-import { Button } from 'react-bootstrap';
+import {
+  Grid,
+  Row,
+  Col,
+  Button,
+  Thumbnail,
+  Glyphicon,
+  Panel
+} from 'react-bootstrap';
 
 class ListDrinks extends Component {
   renderDrinks = (drink, i) => {
     return (
-      <div className="comment" key={i}>
-        <p>
-          <strong>{drink.name}</strong>
-          {drink.desc}
-          <Button onClick={() => this.props.removeDrink(drink.name)}>
-            Remove
-          </Button>
-        </p>
-      </div>
+      <Col xs={3} md={3} lg={3} className="comment" key={i}>
+        <Thumbnail src="/img/drinks/miami-vice.jpg" alt="242x200">
+          <Panel bsStyle="primary">
+            <div className="panel-heading">
+              <div className="btn-group pull-left">
+                <Button
+                  bsSize="xsmall"
+                  onClick={() => this.props.removeDrink(drink.name)}>
+                  <Glyphicon glyph="trash" />
+                </Button>
+              </div>
+              <div className="btn-group pull-right">
+                <Button bsSize="xsmall">
+                  <Glyphicon glyph="pencil" />
+                </Button>
+              </div>
+              <Panel.Title className="text-center" componentClass="h4">
+                {drink.name}
+              </Panel.Title>
+            </div>
+            <Panel.Body>{drink.desc}</Panel.Body>
+          </Panel>
+        </Thumbnail>
+      </Col>
     );
   };
 
@@ -24,7 +47,9 @@ class ListDrinks extends Component {
     let comp;
     if (this.props.drinks) {
       comp = (
-        <div>{Object.values(this.props.drinks).map(this.renderDrinks)}</div>
+        <Grid>
+          <Row>{Object.values(this.props.drinks).map(this.renderDrinks)}</Row>
+        </Grid>
       );
     } else {
       comp = null;

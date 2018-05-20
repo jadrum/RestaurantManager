@@ -12,8 +12,8 @@ class ManageDrinks extends Component {
         <Grid>
           <Row>
             <Panel bsStyle="primary">
-              <div class="panel-heading">
-                <div class="btn-group pull-right">
+              <div className="panel-heading">
+                <div className="btn-group pull-right">
                   <Button bsSize="xsmall">
                     <Glyphicon glyph="plus" />
                   </Button>
