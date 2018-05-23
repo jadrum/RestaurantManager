@@ -4,7 +4,7 @@ import Home from '../home';
 import About from '../about';
 import Login from '../login';
 import ManageDrinks from '../manage';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 const App = () => (
   <div>
