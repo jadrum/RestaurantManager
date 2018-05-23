@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addDrink } from '../../modules/drinks';
+import { updateDrink } from '../../modules/drinks';
 import {
   Button,
   Col,
@@ -13,37 +13,29 @@ import {
   Modal
 } from 'react-bootstrap';
 
-class AddDrink extends Component {
+class UpdateDrink extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       name: '',
-      desc: '',
-      price: ''
+      desc: ''
     };
   }
 
   submitDrink = e => {
     e.preventDefault();
-    this.props.addDrink({
+    this.props.updateDrink({
       name: this.state.name,
-      price: this.state.price,
       desc: this.state.desc
     });
     this.setState({ name: '' });
-    this.setState({ price: '' });
     this.setState({ desc: '' });
-    this.props.closeAdd();
+    this.props.closeUpdate();
   };
 
   onNameChange = e => {
     this.setState({ name: e.target.value });
-  };
-
-  onPriceChange = e => {
-    this.setState({ price: e.target.value });
-    console.log(e.target.value);
   };
 
   onDescChange = e => {
@@ -53,9 +45,11 @@ class AddDrink extends Component {
   render() {
     return (
       <div>
-        <Modal show={this.props.showAddModal} onHide={this.props.closeAdd}>
+        <Modal
+          show={this.props.showUpdateModal}
+          onHide={this.props.closeUpdate}>
           <Modal.Header closeButton>
-            <Modal.Title>Create drink</Modal.Title>
+            <Modal.Title>Update drink</Modal.Title>
           </Modal.Header>
           <Form horizontal onSubmit={this.submitDrink}>
             <Modal.Body>
@@ -69,20 +63,6 @@ class AddDrink extends Component {
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
-                  />
-                </Col>
-              </FormGroup>
-
-              <FormGroup controlId="formPrice">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Drink Price
-                </Col>
-                <Col sm={10}>
-                  <FormControl
-                    componentClass="textarea"
-                    value={this.state.price}
-                    placeholder="$0.00"
-                    onChange={this.onPriceChange}
                   />
                 </Col>
               </FormGroup>
@@ -103,9 +83,9 @@ class AddDrink extends Component {
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="primary" type="submit">
-                Add
+                Save
               </Button>
-              <Button bsStyle="primary" onClick={this.props.closeAdd}>
+              <Button bsStyle="primary" onClick={this.props.closeUpdate}>
                 Cancel
               </Button>
             </Modal.Footer>
@@ -119,6 +99,6 @@ class AddDrink extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ addDrink }, dispatch);
+  bindActionCreators({ updateDrink }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddDrink);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateDrink);
