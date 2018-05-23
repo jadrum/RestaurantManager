@@ -18,7 +18,8 @@ class AddDrink extends Component {
 
     this.state = {
       name: '',
-      desc: ''
+      desc: '',
+      price: ''
     };
   }
 
@@ -26,14 +27,21 @@ class AddDrink extends Component {
     e.preventDefault();
     this.props.addDrink({
       name: this.state.name,
+      price: this.state.price,
       desc: this.state.desc
     });
     this.setState({ name: '' });
+    this.setState({ price: '' });
     this.setState({ desc: '' });
   };
 
   onNameChange = e => {
     this.setState({ name: e.target.value });
+  };
+
+  onPriceChange = e => {
+    this.setState({ price: e.target.value });
+    console.log(e.target.value);
   };
 
   onDescChange = e => {
@@ -53,6 +61,20 @@ class AddDrink extends Component {
               value={this.state.name}
               placeholder="Name"
               onChange={this.onNameChange}
+            />
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formPrice">
+          <Col componentClass={ControlLabel} sm={2}>
+            Drink Price
+          </Col>
+          <Col sm={10}>
+            <FormControl
+              componentClass="textarea"
+              value={this.state.price}
+              placeholder="$0.00"
+              onChange={this.onPriceChange}
             />
           </Col>
         </FormGroup>

@@ -6,7 +6,7 @@ export const UPDATE_DRINK = 'drink/UPDATE';
 
 const initialState = {
   drinks: {
-    bob: { name: 'bob', desc: 'yo' }
+    bob: { name: 'billy', price: '$3.00', desc: 'yo' }
   },
   count: 0,
   isIncrementing: false,
@@ -20,7 +20,11 @@ export default (state = initialState, action) => {
         ...state,
         drinks: {
           ...state.drinks,
-          [action.name]: { name: action.name, desc: action.desc }
+          [action.name]: {
+            name: action.name,
+            price: action.price,
+            desc: action.desc
+          }
         }
       };
 
@@ -64,6 +68,7 @@ export const addDrink = data => {
     dispatch({
       type: ADD_DRINK,
       name: data.name,
+      price: data.price,
       desc: data.desc
     });
   };

@@ -36,7 +36,9 @@ class ListDrinks extends Component {
                 {drink.name}
               </Panel.Title>
             </div>
-            <Panel.Body>{drink.desc}</Panel.Body>
+            <Panel.Body>
+              {drink.desc} - {drink.price}
+            </Panel.Body>
           </Panel>
         </Thumbnail>
       </Col>
@@ -54,6 +56,7 @@ class ListDrinks extends Component {
     } else {
       comp = null;
     }
+
     return <div>{comp}</div>;
   }
 }
