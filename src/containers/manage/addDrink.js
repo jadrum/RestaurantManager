@@ -4,12 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addDrink } from '../../modules/drinks';
 import {
-  Form,
-  FormGroup,
+  Button,
   Col,
   ControlLabel,
+  Form,
   FormControl,
-  Button
+  FormGroup,
+  Modal
 } from 'react-bootstrap';
 
 class AddDrink extends Component {
@@ -30,10 +31,12 @@ class AddDrink extends Component {
     });
     this.setState({ name: '' });
     this.setState({ desc: '' });
+    this.props.handleClose();
   };
 
   onNameChange = e => {
     this.setState({ name: e.target.value });
+    this.setState({ showAdd: true });
   };
 
   onDescChange = e => {
@@ -42,40 +45,52 @@ class AddDrink extends Component {
 
   render() {
     return (
-      <Form horizontal onSubmit={this.submitDrink}>
-        <FormGroup controlId="formName">
-          <Col componentClass={ControlLabel} sm={2}>
-            Drink Name
-          </Col>
-          <Col sm={10}>
-            <FormControl
-              componentClass="textarea"
-              value={this.state.name}
-              placeholder="Name"
-              onChange={this.onNameChange}
-            />
-          </Col>
-        </FormGroup>
+      <div>
+        <Modal show={this.props.showAdd} onHide={this.props.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create drink</Modal.Title>
+          </Modal.Header>
+          <Form horizontal onSubmit={this.submitDrink}>
+            <Modal.Body>
+              <FormGroup controlId="formName">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Name
+                </Col>
+                <Col sm={10}>
+                  <FormControl
+                    componentClass="textarea"
+                    value={this.state.name}
+                    placeholder="Name"
+                    onChange={this.onNameChange}
+                  />
+                </Col>
+              </FormGroup>
 
-        <FormGroup controlId="formDesc">
-          <Col componentClass={ControlLabel} sm={2}>
-            Description
-          </Col>
-          <Col sm={10}>
-            <FormControl
-              componentClass="textarea"
-              value={this.state.desc}
-              placeholder="Description"
-              onChange={this.onDescChange}
-            />
-          </Col>
-        </FormGroup>
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
-            <Button type="submit">Add</Button>
-          </Col>
-        </FormGroup>
-      </Form>
+              <FormGroup controlId="formDesc">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Description
+                </Col>
+                <Col sm={10}>
+                  <FormControl
+                    componentClass="textarea"
+                    value={this.state.desc}
+                    placeholder="Description"
+                    onChange={this.onDescChange}
+                  />
+                </Col>
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button bsStyle="primary" type="submit">
+                Add
+              </Button>
+              <Button bsStyle="primary" onClick={this.props.handleClose}>
+                Cancel
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+      </div>
     );
   }
 }

@@ -4,13 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { removeDrink } from '../../modules/drinks';
 import {
-  Grid,
-  Row,
-  Col,
   Button,
-  Thumbnail,
+  Col,
   Glyphicon,
-  Panel
+  Grid,
+  Panel,
+  Row,
+  Thumbnail
 } from 'react-bootstrap';
 
 class ListDrinks extends Component {
