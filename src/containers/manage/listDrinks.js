@@ -28,7 +28,7 @@ class ListDrinks extends Component {
                 </Button>
               </div>
               <div className="btn-group pull-right">
-                <Button bsSize="xsmall">
+                <Button bsSize="xsmall" onClick={() => this.props.showUpdate()}>
                   <Glyphicon glyph="pencil" />
                 </Button>
               </div>
