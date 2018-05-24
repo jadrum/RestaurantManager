@@ -43,7 +43,6 @@ class AddDrink extends Component {
 
   onPriceChange = e => {
     this.setState({ price: e.target.value });
-    console.log(e.target.value);
   };
 
   onDescChange = e => {

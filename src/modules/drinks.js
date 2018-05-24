@@ -40,7 +40,6 @@ export default (state = initialState, action) => {
       };
 
     case UPDATE_DRINK:
-      console.log('TO DO');
       if (action.oldName === action.newDrink.name) {
         // update the drink, with the new data
         return {
@@ -54,7 +53,6 @@ export default (state = initialState, action) => {
         // remove the old drink, and replace with new drink
         // since primary key has changed
         const { [action.oldName]: remove, ...newDrinks } = state.drinks;
-        console.log('different name in edit');
         return {
           ...state,
           drinks: {
