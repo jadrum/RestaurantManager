@@ -6,7 +6,7 @@ export const UPDATE_DRINK = 'drink/UPDATE';
 
 const initialState = {
   drinks: {
-    bob: { name: 'billy', price: '$3.00', desc: 'yo' }
+    billy: { name: 'billy', price: '$3.00', desc: 'yo' }
   },
   count: 0,
   isIncrementing: false,
@@ -41,9 +41,28 @@ export default (state = initialState, action) => {
 
     case UPDATE_DRINK:
       console.log('TO DO');
-      return {
-        ...state
-      };
+      if (action.oldName === action.newDrink.name) {
+        // update the drink, with the new data
+        return {
+          ...state,
+          drinks: {
+            ...state.drinks,
+            [action.oldName]: action.newDrink
+          }
+        };
+      } else {
+        // remove the old drink, and replace with new drink
+        // since primary key has changed
+        const { [action.oldName]: remove, ...newDrinks } = state.drinks;
+        console.log('different name in edit');
+        return {
+          ...state,
+          drinks: {
+            ...newDrinks,
+            [action.newDrink.name]: action.newDrink
+          }
+        };
+      }
 
     case INCREMENT_REQUESTED:
       return {
@@ -87,9 +106,8 @@ export const updateDrink = data => {
   return dispatch => {
     dispatch({
       type: UPDATE_DRINK,
-      oldName: data.old,
-      newName: data.new,
-      newDesc: data.desc
+      oldName: data.oldName,
+      newDrink: data.newDrink
     });
   };
 };

@@ -19,6 +19,7 @@ class UpdateDrink extends Component {
 
     this.state = {
       name: '',
+      price: '',
       desc: ''
     };
   }
@@ -26,10 +27,15 @@ class UpdateDrink extends Component {
   submitDrink = e => {
     e.preventDefault();
     this.props.updateDrink({
-      name: this.state.name,
-      desc: this.state.desc
+      oldName: this.props.drink.name,
+      newDrink: {
+        name: this.state.name,
+        price: this.state.price,
+        desc: this.state.desc
+      }
     });
     this.setState({ name: '' });
+    this.setState({ price: '' });
     this.setState({ desc: '' });
     this.props.closeUpdate();
   };
@@ -38,8 +44,19 @@ class UpdateDrink extends Component {
     this.setState({ name: e.target.value });
   };
 
+  onPriceChange = e => {
+    this.setState({ price: e.target.value });
+    console.log(e.target.value);
+  };
+
   onDescChange = e => {
     this.setState({ desc: e.target.value });
+  };
+
+  handleEnter = () => {
+    this.setState({ name: this.props.drink.name });
+    this.setState({ price: this.props.drink.price });
+    this.setState({ desc: this.props.drink.desc });
   };
 
   render() {
@@ -47,7 +64,8 @@ class UpdateDrink extends Component {
       <div>
         <Modal
           show={this.props.showUpdateModal}
-          onHide={this.props.closeUpdate}>
+          onHide={this.props.closeUpdate}
+          onEnter={this.handleEnter}>
           <Modal.Header closeButton>
             <Modal.Title>Update drink</Modal.Title>
           </Modal.Header>
@@ -63,6 +81,20 @@ class UpdateDrink extends Component {
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
+                  />
+                </Col>
+              </FormGroup>
+
+              <FormGroup controlId="formPrice">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Drink Price
+                </Col>
+                <Col sm={10}>
+                  <FormControl
+                    componentClass="textarea"
+                    value={this.state.price}
+                    placeholder="$0.00"
+                    onChange={this.onPriceChange}
                   />
                 </Col>
               </FormGroup>
