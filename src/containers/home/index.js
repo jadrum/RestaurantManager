@@ -3,7 +3,6 @@ import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { increment, incrementAsync } from '../../modules/drinks';
 
 const Home = props => (
   <div>
@@ -26,20 +25,9 @@ const Home = props => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  count: state.drinks.count,
-  isIncrementing: state.drinks.isIncrementing,
-  isDecrementing: state.drinks.isDecrementing
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      increment,
-      incrementAsync,
-      changePage: () => push('/about-us')
-    },
-    dispatch
-  );
+  bindActionCreators({ changePage: () => push('/about-us') }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

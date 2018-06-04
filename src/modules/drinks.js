@@ -1,16 +1,11 @@
-export const INCREMENT_REQUESTED = 'counter/INCREMENT_REQUESTED';
-export const INCREMENT = 'counter/INCREMENT';
 export const ADD_DRINK = 'drink/ADD';
 export const REMOVE_DRINK = 'drink/REMOVE';
 export const UPDATE_DRINK = 'drink/UPDATE';
 
 const initialState = {
   drinks: {
-    billy: { name: 'billy', price: '$3.00', desc: 'yo' }
-  },
-  count: 0,
-  isIncrementing: false,
-  isDecrementing: false
+    billy: { name: 'billy', price: '3.00', desc: 'yo' }
+  }
 };
 
 export default (state = initialState, action) => {
@@ -62,19 +57,6 @@ export default (state = initialState, action) => {
         };
       }
 
-    case INCREMENT_REQUESTED:
-      return {
-        ...state,
-        isIncrementing: true
-      };
-
-    case INCREMENT:
-      return {
-        ...state,
-        count: state.count + 1,
-        isIncrementing: !state.isIncrementing
-      };
-
     default:
       return state;
   }
@@ -107,31 +89,5 @@ export const updateDrink = data => {
       oldName: data.oldName,
       newDrink: data.newDrink
     });
-  };
-};
-
-export const increment = () => {
-  return dispatch => {
-    dispatch({
-      type: INCREMENT_REQUESTED
-    });
-
-    dispatch({
-      type: INCREMENT
-    });
-  };
-};
-
-export const incrementAsync = () => {
-  return dispatch => {
-    dispatch({
-      type: INCREMENT_REQUESTED
-    });
-
-    return setTimeout(() => {
-      dispatch({
-        type: INCREMENT
-      });
-    }, 3000);
   };
 };

@@ -10,6 +10,8 @@ import {
   Form,
   FormControl,
   FormGroup,
+  HelpBlock,
+  InputGroup,
   Modal
 } from 'react-bootstrap';
 
@@ -19,13 +21,19 @@ class UpdateDrink extends Component {
 
     this.state = {
       name: '',
+      nameValid: true,
       price: '',
-      desc: ''
+      desc: '',
+      nameError: 'there is a problem...'
     };
   }
 
   submitDrink = e => {
     e.preventDefault();
+    /* Check for errors before submitting */
+    if (this.nameValidation() === 'error') {
+      return;
+    }
     this.props.updateDrink({
       oldName: this.props.drink.name,
       newDrink: {
@@ -41,7 +49,20 @@ class UpdateDrink extends Component {
   };
 
   onNameChange = e => {
-    this.setState({ name: e.target.value });
+    let old = this.props.drink.name; // the old drink name
+    let n = e.target.value; // the new drink name
+    if (old !== n && this.props.drinks[n]) {
+      this.setState({ nameError: 'Name already in use.' });
+      this.setState({ nameValid: false });
+    } else if (n === '') {
+      this.setState({ nameError: 'Name field is required.' });
+      this.setState({ nameValid: false });
+    } else {
+      // Everythings all good
+      this.setState({ nameError: '' });
+      this.setState({ nameValid: true });
+    }
+    this.setState({ name: n }); // allow the name change
   };
 
   onPriceChange = e => {
@@ -58,6 +79,12 @@ class UpdateDrink extends Component {
     this.setState({ desc: this.props.drink.desc });
   };
 
+  nameValidation = () => {
+    if (this.state.nameValid === false) {
+      return 'error'; // this shows an error in form
+    }
+  };
+
   render() {
     return (
       <div>
@@ -70,31 +97,45 @@ class UpdateDrink extends Component {
           </Modal.Header>
           <Form horizontal onSubmit={this.submitDrink}>
             <Modal.Body>
-              <FormGroup controlId="formName">
+              <FormGroup
+                controlId="formName"
+                validationState={this.nameValidation()}>
                 <Col componentClass={ControlLabel} sm={2}>
                   Name
                 </Col>
                 <Col sm={10}>
                   <FormControl
-                    componentClass="textarea"
+                    componentClass="input"
+                    name="name"
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
+                    required
                   />
                 </Col>
+                <HelpBlock>
+                  <Col sm={2} />
+                  <Col sm={10}>{this.state.nameError}</Col>
+                </HelpBlock>
               </FormGroup>
 
               <FormGroup controlId="formPrice">
                 <Col componentClass={ControlLabel} sm={2}>
-                  Drink Price
+                  Price
                 </Col>
                 <Col sm={10}>
-                  <FormControl
-                    componentClass="textarea"
-                    value={this.state.price}
-                    placeholder="$0.00"
-                    onChange={this.onPriceChange}
-                  />
+                  <InputGroup>
+                    <InputGroup.Addon>$</InputGroup.Addon>
+                    <FormControl
+                      componentClass="input"
+                      type="number"
+                      min="0.00"
+                      step=".01"
+                      value={this.state.price}
+                      placeholder="0.00"
+                      onChange={this.onPriceChange}
+                    />
+                  </InputGroup>
                 </Col>
               </FormGroup>
 
@@ -127,7 +168,9 @@ class UpdateDrink extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  drinks: state.drinks.drinks
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ updateDrink }, dispatch);

@@ -26,6 +26,15 @@ class AddDrink extends Component {
 
   submitDrink = e => {
     e.preventDefault();
+    /**
+     * checking whether the drink already exists...
+     * we need to do more with this by actually
+     * notifying the user
+     */
+    if (this.props.drinks[this.state.name]) {
+      console.log('already there');
+      return;
+    }
     this.props.addDrink({
       name: this.state.name,
       price: this.state.price,
@@ -115,7 +124,9 @@ class AddDrink extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  drinks: state.drinks.drinks
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ addDrink }, dispatch);
