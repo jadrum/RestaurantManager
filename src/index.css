@@ -14,3 +14,30 @@ body {
 button:disabled {
   opacity: 0.5;
 }
+
+/** removing background on $ sign in input **/
+.input-group-addon {
+  background-color: #fff;
+}
+/** removing line to right of $ sign in input **/
+.input-group .input-group-addon + .form-control {
+  border-left: none;
+}
+
+/** Used to hide/show form hints depending on validation error **/
+.help-block {
+  display: none;
+}
+.form-group.has-error .help-block {
+  display: block;
+}
+
+/* override bootstrap navbar colors
+.navbar, .navbar-default {
+    background-image: linear-gradient(to bottom,#337ab7 0,#2e6da4 100%) !important;
+}
+
+.navbar-default .navbar-brand {
+    color: white;
+}
+*/

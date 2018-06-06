@@ -1,8 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { removeDrink } from '../../modules/drinks';
+import { removeDrink, fetchDrinks } from '../../actions/drinks';
 import {
   Button,
   Col,
@@ -14,6 +13,10 @@ import {
 } from 'react-bootstrap';
 
 class ListDrinks extends Component {
+  componentWillMount() {
+    this.props.fetchDrinks(); // effectively sets up state by listening to firebase
+  }
+
   renderDrinks = (drink, i) => {
     return (
       <Col xs={3} md={3} lg={3} className="comment" key={i}>
@@ -28,7 +31,9 @@ class ListDrinks extends Component {
                 </Button>
               </div>
               <div className="btn-group pull-right">
-                <Button bsSize="xsmall" onClick={() => this.props.showUpdate()}>
+                <Button
+                  bsSize="xsmall"
+                  onClick={() => this.props.showUpdate(drink)}>
                   <Glyphicon glyph="pencil" />
                 </Button>
               </div>
@@ -65,7 +70,6 @@ const mapStateToProps = state => ({
   drinks: state.drinks.drinks
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ removeDrink }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ListDrinks);
+export default connect(mapStateToProps, { removeDrink, fetchDrinks })(
+  ListDrinks
+);

@@ -21,8 +21,6 @@ const App = () => (
             <MenuItem eventKey={1.1} href="manage-drinks">
               Drinks
             </MenuItem>
-            <MenuItem divider />
-            <MenuItem eventKey={1.2}>Separated link</MenuItem>
           </NavDropdown>
         </Nav>
         <Nav pullRight>

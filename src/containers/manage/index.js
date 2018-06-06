@@ -12,7 +12,8 @@ class ManageDrinks extends Component {
 
     this.state = {
       showAddModal: false,
-      showUpdateModal: false
+      showUpdateModal: false,
+      drinkBeingUpdated: null
     };
   }
 
@@ -27,13 +28,14 @@ class ManageDrinks extends Component {
   };
 
   /** Function used by AddDrink component **/
-  showUpdate = () => {
-    console.log('woohoo updating');
+  showUpdate = drink => {
+    this.setState({ drinkBeingUpdated: drink });
     this.setState({ showUpdateModal: true });
   };
 
   /** Function used by AddDrink component **/
   closeUpdate = () => {
+    this.setState({ drinkBeingUpdated: null });
     this.setState({ showUpdateModal: false });
   };
 
@@ -61,6 +63,7 @@ class ManageDrinks extends Component {
             <UpdateDrink
               showUpdateModal={this.state.showUpdateModal}
               closeUpdate={this.closeUpdate}
+              drink={this.state.drinkBeingUpdated}
             />
             <ListDrinks showUpdate={this.showUpdate} />
           </Row>

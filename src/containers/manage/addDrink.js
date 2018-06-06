@@ -1,8 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addDrink } from '../../modules/drinks';
+import { addDrink } from '../../actions/drinks';
 import {
   Button,
   Col,
@@ -10,6 +9,8 @@ import {
   Form,
   FormControl,
   FormGroup,
+  HelpBlock,
+  InputGroup,
   Modal
 } from 'react-bootstrap';
 
@@ -19,13 +20,24 @@ class AddDrink extends Component {
 
     this.state = {
       name: '',
-      desc: '',
-      price: ''
+      nameValid: true,
+      nameError: '',
+      price: '',
+      priceValid: true,
+      priceError: '',
+      desc: ''
     };
   }
 
   submitDrink = e => {
     e.preventDefault();
+    /* Check for errors before submitting */
+    if (
+      this.nameValidation() === 'error' ||
+      this.priceValidation() === 'error'
+    ) {
+      return;
+    }
     this.props.addDrink({
       name: this.state.name,
       price: this.state.price,
@@ -38,16 +50,46 @@ class AddDrink extends Component {
   };
 
   onNameChange = e => {
-    this.setState({ name: e.target.value });
+    let n = e.target.value; // the new drink name
+    if (this.props.drinks[n]) {
+      this.setState({ nameError: 'Name already in use.' });
+      this.setState({ nameValid: false });
+    } else if (n === '') {
+      this.setState({ nameError: 'Name field is required.' });
+      this.setState({ nameValid: false });
+    } else {
+      this.setState({ nameError: '' }); // Everythings all good
+      this.setState({ nameValid: true });
+    }
+    this.setState({ name: n }); // allow the name change
   };
 
   onPriceChange = e => {
-    this.setState({ price: e.target.value });
-    console.log(e.target.value);
+    let p = e.target.value;
+    if (p === '') {
+      this.setState({ priceError: 'Price field is required.' });
+      this.setState({ priceValid: false });
+    } else {
+      this.setState({ priceError: '' });
+      this.setState({ priceValid: true });
+    }
+    this.setState({ price: p });
   };
 
   onDescChange = e => {
     this.setState({ desc: e.target.value });
+  };
+
+  nameValidation = () => {
+    if (this.state.nameValid === false) {
+      return 'error'; // this shows an error in form
+    }
+  };
+
+  priceValidation = () => {
+    if (this.state.priceValid === false) {
+      return 'error'; // this shows an error in form
+    }
   };
 
   render() {
@@ -59,32 +101,53 @@ class AddDrink extends Component {
           </Modal.Header>
           <Form horizontal onSubmit={this.submitDrink}>
             <Modal.Body>
-              <FormGroup controlId="formName">
+              <FormGroup
+                controlId="formName"
+                validationState={this.nameValidation()}>
                 <Col componentClass={ControlLabel} sm={2}>
                   Name
                 </Col>
                 <Col sm={10}>
                   <FormControl
                     componentClass="textarea"
+                    name="name"
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
+                    required
                   />
                 </Col>
+                <HelpBlock>
+                  <Col sm={2} />
+                  <Col sm={10}>{this.state.nameError}</Col>
+                </HelpBlock>
               </FormGroup>
 
-              <FormGroup controlId="formPrice">
+              <FormGroup
+                controlId="formPrice"
+                validationState={this.priceValidation()}>
                 <Col componentClass={ControlLabel} sm={2}>
-                  Drink Price
+                  Price
                 </Col>
                 <Col sm={10}>
-                  <FormControl
-                    componentClass="textarea"
-                    value={this.state.price}
-                    placeholder="$0.00"
-                    onChange={this.onPriceChange}
-                  />
+                  <InputGroup>
+                    <InputGroup.Addon>$</InputGroup.Addon>
+                    <FormControl
+                      componentClass="input"
+                      type="number"
+                      min="0.00"
+                      step=".01"
+                      value={this.state.price}
+                      placeholder="0.00"
+                      onChange={this.onPriceChange}
+                      required
+                    />
+                  </InputGroup>
                 </Col>
+                <HelpBlock>
+                  <Col sm={2} />
+                  <Col sm={10}>{this.state.priceError}</Col>
+                </HelpBlock>
               </FormGroup>
 
               <FormGroup controlId="formDesc">
@@ -116,9 +179,8 @@ class AddDrink extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  drinks: state.drinks.drinks
+});
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ addDrink }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddDrink);
+export default connect(mapStateToProps, { addDrink })(AddDrink);

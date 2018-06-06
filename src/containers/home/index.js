@@ -1,45 +1,50 @@
 import React from 'react';
+import { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { increment, incrementAsync } from '../../modules/drinks';
+import {
+  Button,
+  ControlLabel,
+  FormControl,
+  FormGroup,
+  Glyphicon,
+  Grid,
+  Jumbotron,
+  Row
+} from 'react-bootstrap';
 
-const Home = props => (
-  <div>
-    <h1>Home</h1>
-    <input type="text" />
-    <form>
-      <FormGroup controlId="formControlsTextarea">
-        <ControlLabel>Textarea</ControlLabel>
-        <FormControl componentClass="textarea" placeholder="textarea" />
-      </FormGroup>
-      <Button bsStyle="primary" type="submit">
-        Submit
-      </Button>
-    </form>
-    <p>
-      <button onClick={() => props.changePage()}>
-        Go to about page via redux
-      </button>
-    </p>
-  </div>
-);
+class Home extends Component {
+  openGitHub = () => {
+    const url = 'https://github.com/jadrum/RestaurantManager';
+    window.open(url, '_blank');
+  };
 
-const mapStateToProps = state => ({
-  count: state.drinks.count,
-  isIncrementing: state.drinks.isIncrementing,
-  isDecrementing: state.drinks.isDecrementing
-});
+  render() {
+    return (
+      <div>
+        <Grid>
+          <Row>
+            <Jumbotron>
+              <h1>JDB Burger Bar</h1>
+              <p>
+                This is a restaurant POS system app for the fictional restaurant
+                JDB Burger Bar (named after the developers Justin, Dylan, and
+                Brandon). This app will allow restaurant employees to manage
+                their menu, wait on customers, take orders, and hopefully much
+                more. Feel free to browse around as we are still in production.
+              </p>
+            </Jumbotron>
+          </Row>
+        </Grid>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      increment,
-      incrementAsync,
-      changePage: () => push('/about-us')
-    },
-    dispatch
-  );
+  bindActionCreators({ changePage: () => push('/about-us') }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
