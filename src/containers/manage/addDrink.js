@@ -1,8 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addDrink } from '../../modules/drinks';
+import { addDrink } from '../../actions/drinks';
 import {
   Button,
   Col,
@@ -128,7 +127,4 @@ const mapStateToProps = state => ({
   drinks: state.drinks.drinks
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ addDrink }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddDrink);
+export default connect(mapStateToProps, { addDrink })(AddDrink);
