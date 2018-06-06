@@ -9,6 +9,7 @@
     "react-scripts": "^1.0.17"
   },
   "dependencies": {
+    "firebase": "^5.0.4",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.2",

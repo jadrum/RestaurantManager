@@ -7,6 +7,7 @@ import App from './containers/app';
 
 import 'sanitize.css/sanitize.css';
 import './index.css';
+import './firebase/firebase';
 
 const target = document.querySelector('#root');
 
