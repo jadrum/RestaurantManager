@@ -22,8 +22,9 @@ class Home extends Component {
                 This is a restaurant POS system app for the fictional restaurant
                 JDB Burger Bar (named after the developers Justin, Dylan, and
                 Brandon). This app will allow restaurant employees to manage
-                their menu, wait on customers, take orders, and hopefully much
-                more. Feel free to browse around as we are still in production.
+                their menu, wait on customers, take orders, close tabs, and
+                hopefully much more. Feel free to browse around as we are still
+                in production.
               </p>
             </Jumbotron>
           </Row>
