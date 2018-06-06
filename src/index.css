@@ -31,3 +31,13 @@ button:disabled {
 .form-group.has-error .help-block {
   display: block;
 }
+
+/* override bootstrap navbar colors
+.navbar, .navbar-default {
+    background-image: linear-gradient(to bottom,#337ab7 0,#2e6da4 100%) !important;
+}
+
+.navbar-default .navbar-brand {
+    color: white;
+}
+*/
