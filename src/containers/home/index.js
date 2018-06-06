@@ -3,16 +3,7 @@ import { Component } from 'react';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Button,
-  ControlLabel,
-  FormControl,
-  FormGroup,
-  Glyphicon,
-  Grid,
-  Jumbotron,
-  Row
-} from 'react-bootstrap';
+import { Grid, Jumbotron, Row } from 'react-bootstrap';
 
 class Home extends Component {
   openGitHub = () => {
