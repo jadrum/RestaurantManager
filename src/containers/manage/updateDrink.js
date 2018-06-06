@@ -21,16 +21,21 @@ class UpdateDrink extends Component {
     this.state = {
       name: '',
       nameValid: true,
+      nameError: '',
       price: '',
-      desc: '',
-      nameError: 'there is a problem...'
+      priceValid: true,
+      priceError: '',
+      desc: ''
     };
   }
 
   submitDrink = e => {
     e.preventDefault();
     /* Check for errors before submitting */
-    if (this.nameValidation() === 'error') {
+    if (
+      this.nameValidation() === 'error' ||
+      this.priceValidation() === 'error'
+    ) {
       return;
     }
     this.props.updateDrink({
@@ -57,15 +62,22 @@ class UpdateDrink extends Component {
       this.setState({ nameError: 'Name field is required.' });
       this.setState({ nameValid: false });
     } else {
-      // Everythings all good
-      this.setState({ nameError: '' });
+      this.setState({ nameError: '' }); // Everythings all good
       this.setState({ nameValid: true });
     }
     this.setState({ name: n }); // allow the name change
   };
 
   onPriceChange = e => {
-    this.setState({ price: e.target.value });
+    let p = e.target.value;
+    if (p === '') {
+      this.setState({ priceError: 'Price field is required.' });
+      this.setState({ priceValid: false });
+    } else {
+      this.setState({ priceError: '' });
+      this.setState({ priceValid: true });
+    }
+    this.setState({ price: p });
   };
 
   onDescChange = e => {
@@ -80,6 +92,12 @@ class UpdateDrink extends Component {
 
   nameValidation = () => {
     if (this.state.nameValid === false) {
+      return 'error'; // this shows an error in form
+    }
+  };
+
+  priceValidation = () => {
+    if (this.state.priceValid === false) {
       return 'error'; // this shows an error in form
     }
   };
@@ -118,7 +136,9 @@ class UpdateDrink extends Component {
                 </HelpBlock>
               </FormGroup>
 
-              <FormGroup controlId="formPrice">
+              <FormGroup
+                controlId="formPrice"
+                validationState={this.priceValidation()}>
                 <Col componentClass={ControlLabel} sm={2}>
                   Price
                 </Col>
@@ -133,9 +153,14 @@ class UpdateDrink extends Component {
                       value={this.state.price}
                       placeholder="0.00"
                       onChange={this.onPriceChange}
+                      required
                     />
                   </InputGroup>
                 </Col>
+                <HelpBlock>
+                  <Col sm={2} />
+                  <Col sm={10}>{this.state.priceError}</Col>
+                </HelpBlock>
               </FormGroup>
 
               <FormGroup controlId="formDesc">
