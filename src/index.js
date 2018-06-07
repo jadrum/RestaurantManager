@@ -8,6 +8,7 @@ import App from './containers/app';
 import 'sanitize.css/sanitize.css';
 import './index.css';
 import './firebase/firebase';
+require('dotenv').config();
 
 const target = document.querySelector('#root');
 
