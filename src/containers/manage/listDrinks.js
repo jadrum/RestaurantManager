@@ -19,7 +19,7 @@ class ListDrinks extends Component {
 
   renderDrinks = (drink, i) => {
     return (
-      <Col xs={3} md={3} lg={3} className="comment" key={i}>
+      <Col xs={12} md={6} lg={3} className="comment" key={i}>
         <Thumbnail src="/img/drinks/miami-vice.jpg" alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
