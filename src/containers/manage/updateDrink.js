@@ -21,10 +21,10 @@ class UpdateDrink extends Component {
     this.state = {
       name: '',
       nameValid: true,
-      nameError: '',
+      nameMsg: '',
       price: '',
       priceValid: true,
-      priceError: '',
+      priceMsg: '',
       desc: ''
     };
   }
@@ -56,13 +56,13 @@ class UpdateDrink extends Component {
     let old = this.props.drink.name; // the old drink name
     let n = e.target.value; // the new drink name
     if (old !== n && this.props.drinks[n]) {
-      this.setState({ nameError: 'Name already in use.' });
+      this.setState({ nameMsg: 'Name already in use.' });
       this.setState({ nameValid: false });
     } else if (n === '') {
-      this.setState({ nameError: 'Name field is required.' });
+      this.setState({ nameMsg: 'Name field is required.' });
       this.setState({ nameValid: false });
     } else {
-      this.setState({ nameError: '' }); // Everythings all good
+      this.setState({ nameMsg: '' }); // Everythings all good
       this.setState({ nameValid: true });
     }
     this.setState({ name: n }); // allow the name change
@@ -71,10 +71,10 @@ class UpdateDrink extends Component {
   onPriceChange = e => {
     let p = e.target.value;
     if (p === '') {
-      this.setState({ priceError: 'Price field is required.' });
+      this.setState({ priceMsg: 'Price field is required.' });
       this.setState({ priceValid: false });
     } else {
-      this.setState({ priceError: '' });
+      this.setState({ priceMsg: '' });
       this.setState({ priceValid: true });
     }
     this.setState({ price: p });
@@ -102,12 +102,21 @@ class UpdateDrink extends Component {
     }
   };
 
+  handleClose = () => {
+    console.log('handling close');
+    this.setState({ nameValid: '' }); // reset validation
+    this.setState({ nameMsg: true });
+    this.setState({ priceValid: '' }); // reset validation
+    this.setState({ priceMsg: true });
+    this.props.closeUpdate();
+  };
+
   render() {
     return (
       <div>
         <Modal
           show={this.props.showUpdateModal}
-          onHide={this.props.closeUpdate}
+          onHide={this.handleClose}
           onEnter={this.handleEnter}>
           <Modal.Header closeButton>
             <Modal.Title>Update drink</Modal.Title>
@@ -132,7 +141,7 @@ class UpdateDrink extends Component {
                 </Col>
                 <HelpBlock>
                   <Col sm={2} />
-                  <Col sm={10}>{this.state.nameError}</Col>
+                  <Col sm={10}>{this.state.nameMsg}</Col>
                 </HelpBlock>
               </FormGroup>
 
@@ -159,7 +168,7 @@ class UpdateDrink extends Component {
                 </Col>
                 <HelpBlock>
                   <Col sm={2} />
-                  <Col sm={10}>{this.state.priceError}</Col>
+                  <Col sm={10}>{this.state.priceMsg}</Col>
                 </HelpBlock>
               </FormGroup>
 
@@ -181,7 +190,7 @@ class UpdateDrink extends Component {
               <Button bsStyle="primary" type="submit">
                 Save
               </Button>
-              <Button bsStyle="primary" onClick={this.props.closeUpdate}>
+              <Button bsStyle="primary" onClick={this.handleClose}>
                 Cancel
               </Button>
             </Modal.Footer>
