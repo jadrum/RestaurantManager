@@ -6,11 +6,6 @@ import { connect } from 'react-redux';
 import { Grid, Jumbotron, Row } from 'react-bootstrap';
 
 class Home extends Component {
-  openGitHub = () => {
-    const url = 'https://github.com/jadrum/RestaurantManager';
-    window.open(url, '_blank');
-  };
-
   render() {
     return (
       <div>
