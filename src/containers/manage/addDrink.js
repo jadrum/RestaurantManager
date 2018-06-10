@@ -10,6 +10,7 @@ import {
   FormControl,
   FormGroup,
   HelpBlock,
+  Image,
   InputGroup,
   Modal
 } from 'react-bootstrap';
@@ -25,7 +26,8 @@ class AddDrink extends Component {
       price: '',
       priceValid: true,
       priceError: '',
-      desc: ''
+      desc: '',
+      image: null // image for drink and firebase
     };
   }
 
@@ -41,19 +43,28 @@ class AddDrink extends Component {
     this.props.addDrink({
       name: this.state.name,
       price: this.state.price,
-      desc: this.state.desc
+      desc: this.state.desc,
+      image: this.state.image,
+      imageUrl: '/img/drinks/default.jpg',
+      imageRef: null
     });
     this.setState({ name: '' });
     this.setState({ price: '' });
     this.setState({ desc: '' });
+    this.setState({ image: null });
     this.props.closeAdd();
   };
 
   onNameChange = e => {
     let n = e.target.value; // the new drink name
-    if (this.props.drinks[n]) {
-      this.setState({ nameError: 'Name already in use.' });
-      this.setState({ nameValid: false });
+    if (this.props.drinks) {
+      if (this.props.drinks[n]) {
+        this.setState({ nameError: 'Name already in use.' });
+        this.setState({ nameValid: false });
+      } else {
+        this.setState({ nameError: '' }); // Everythings all good
+        this.setState({ nameValid: true });
+      }
     } else if (n === '') {
       this.setState({ nameError: 'Name field is required.' });
       this.setState({ nameValid: false });
@@ -76,9 +87,7 @@ class AddDrink extends Component {
     this.setState({ price: p });
   };
 
-  onDescChange = e => {
-    this.setState({ desc: e.target.value });
-  };
+  onDescChange = e => this.setState({ desc: e.target.value });
 
   nameValidation = () => {
     if (this.state.nameValid === false) {
@@ -91,6 +100,9 @@ class AddDrink extends Component {
       return 'error'; // this shows an error in form
     }
   };
+
+  /* Firebase file storage system functions */
+  handleFileSelect = e => this.setState({ image: e.target.files[0] });
 
   render() {
     return (
@@ -161,6 +173,21 @@ class AddDrink extends Component {
                     placeholder="Description"
                     onChange={this.onDescChange}
                   />
+                </Col>
+              </FormGroup>
+
+              <FormGroup controlId="formImg">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Avatar
+                </Col>
+                <Col sm={10}>
+                  {this.state.image && (
+                    <Image
+                      src={URL.createObjectURL(this.state.image)}
+                      responsive
+                    />
+                  )}
+                  <FormControl type="file" onChange={this.handleFileSelect} />
                 </Col>
               </FormGroup>
             </Modal.Body>

@@ -13,9 +13,12 @@ firebase.initializeApp(FirebaseConfig);
 
 const db = firebase.database();
 const drinks = db.ref('drinks');
+const storage = firebase.storage();
+const images = storage.ref('images');
 
-export { firebase, drinks, db as default };
-
+/**
+ * FIREBASE EVENT LISTENERS
+ */
 // child removed
 db.ref('drinks').on('child_removed', snapshot => {
   console.log('removed: ', snapshot.key, snapshot.val());
@@ -30,3 +33,91 @@ db.ref('drinks').on('child_changed', snapshot => {
 db.ref('drinks').on('child_added', snapshot => {
   console.log('added: ', snapshot.key, snapshot.val());
 });
+
+/**
+ * FIREBASE INTERACTION FUNCTIONS FOR DB AND STORAGE
+ */
+const addDrinkToFb = (name, data) => {
+  drinks.child(name).set(data); // still upload the drink
+};
+
+const updateDrinkInFb = (name, data) => {
+  drinks.child(name).update(data);
+};
+
+const removeDrinkFromFb = (name, cb) => {
+  drinks
+    .child(name)
+    .remove()
+    .then(cb)
+    .catch(e => {
+      console.log('Error removing drink: ', name, ' error status: ', e);
+    });
+};
+
+const addImageToFb = (name, image) => {
+  return images.child(name).put(image);
+};
+
+const removeImageFromFb = (image, drink) => {
+  images
+    .child(image)
+    .delete()
+    .then(() => {})
+    .catch(e => {
+      console.log(
+        'Error removing image for drink: ',
+        drink,
+        ' error status: ',
+        e
+      );
+    });
+};
+
+const getUrlFromFb = (task, name, data, cb) => {
+  task.snapshot.ref // try to download the image url
+    .getDownloadURL()
+    .then(url => {
+      // successfully retrieve url
+      data.imageUrl = url;
+      data.imageRef = name;
+      cb(data.name, data); // upload the drink
+    })
+    .catch(e => {
+      console.log("couldn't find drink url");
+      cb(data.name, data); // still upload the drink
+    });
+};
+
+const fbTaskHandler = (task, errorCB, completeCB) => {
+  task.on(
+    'state_changed',
+    function progress(snapshot) {
+      // don't care
+    },
+    function error(e) {
+      // if there is an error
+      console.log('Task had an error: ', e);
+      errorCB();
+    },
+    function complete() {
+      // task successful
+      completeCB(); // delegate work
+    }
+  );
+};
+
+export {
+  firebase,
+  drinks,
+  storage,
+  images,
+  addDrinkToFb,
+  updateDrinkInFb,
+  removeDrinkFromFb,
+  addImageToFb,
+  removeImageFromFb,
+  getUrlFromFb,
+  fbTaskHandler,
+  db as default
+};

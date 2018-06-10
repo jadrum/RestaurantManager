@@ -10,6 +10,7 @@ import {
   FormControl,
   FormGroup,
   HelpBlock,
+  Image,
   InputGroup,
   Modal
 } from 'react-bootstrap';
@@ -21,11 +22,15 @@ class UpdateDrink extends Component {
     this.state = {
       name: '',
       nameValid: true,
-      nameError: '',
+      nameMsg: '',
       price: '',
       priceValid: true,
-      priceError: '',
-      desc: ''
+      priceMsg: '',
+      desc: '',
+      image: null,
+      imageUrl: null,
+      imageRef: null,
+      newImage: false
     };
   }
 
@@ -43,8 +48,12 @@ class UpdateDrink extends Component {
       newDrink: {
         name: this.state.name,
         price: this.state.price,
-        desc: this.state.desc
-      }
+        desc: this.state.desc,
+        image: this.state.image,
+        imageUrl: this.state.imageUrl,
+        imageRef: this.state.imageRef
+      },
+      newImage: this.state.newImage
     });
     this.setState({ name: '' });
     this.setState({ price: '' });
@@ -56,13 +65,13 @@ class UpdateDrink extends Component {
     let old = this.props.drink.name; // the old drink name
     let n = e.target.value; // the new drink name
     if (old !== n && this.props.drinks[n]) {
-      this.setState({ nameError: 'Name already in use.' });
+      this.setState({ nameMsg: 'Name already in use.' });
       this.setState({ nameValid: false });
     } else if (n === '') {
-      this.setState({ nameError: 'Name field is required.' });
+      this.setState({ nameMsg: 'Name field is required.' });
       this.setState({ nameValid: false });
     } else {
-      this.setState({ nameError: '' }); // Everythings all good
+      this.setState({ nameMsg: '' }); // Everythings all good
       this.setState({ nameValid: true });
     }
     this.setState({ name: n }); // allow the name change
@@ -71,10 +80,10 @@ class UpdateDrink extends Component {
   onPriceChange = e => {
     let p = e.target.value;
     if (p === '') {
-      this.setState({ priceError: 'Price field is required.' });
+      this.setState({ priceMsg: 'Price field is required.' });
       this.setState({ priceValid: false });
     } else {
-      this.setState({ priceError: '' });
+      this.setState({ priceMsg: '' });
       this.setState({ priceValid: true });
     }
     this.setState({ price: p });
@@ -88,6 +97,10 @@ class UpdateDrink extends Component {
     this.setState({ name: this.props.drink.name });
     this.setState({ price: this.props.drink.price });
     this.setState({ desc: this.props.drink.desc });
+    this.setState({ imageUrl: this.props.drink.imageUrl });
+    if (this.props.drink.imageRef !== undefined) {
+      this.setState({ imageRef: this.props.drink.imageRef });
+    }
   };
 
   nameValidation = () => {
@@ -102,12 +115,28 @@ class UpdateDrink extends Component {
     }
   };
 
+  handleClose = () => {
+    this.setState({ nameValid: '' }); // reset validation
+    this.setState({ nameMsg: true });
+    this.setState({ priceValid: '' }); // reset validation
+    this.setState({ priceMsg: true });
+    this.setState({ image: null }); // reset image state
+    this.setState({ newImage: false });
+    this.props.closeUpdate();
+  };
+
+  /* Firebase file storage system functions */
+  handleFileSelect = e => {
+    this.setState({ newImage: true });
+    this.setState({ image: e.target.files[0] });
+  };
+
   render() {
     return (
       <div>
         <Modal
           show={this.props.showUpdateModal}
-          onHide={this.props.closeUpdate}
+          onHide={this.handleClose}
           onEnter={this.handleEnter}>
           <Modal.Header closeButton>
             <Modal.Title>Update drink</Modal.Title>
@@ -132,7 +161,7 @@ class UpdateDrink extends Component {
                 </Col>
                 <HelpBlock>
                   <Col sm={2} />
-                  <Col sm={10}>{this.state.nameError}</Col>
+                  <Col sm={10}>{this.state.nameMsg}</Col>
                 </HelpBlock>
               </FormGroup>
 
@@ -159,7 +188,7 @@ class UpdateDrink extends Component {
                 </Col>
                 <HelpBlock>
                   <Col sm={2} />
-                  <Col sm={10}>{this.state.priceError}</Col>
+                  <Col sm={10}>{this.state.priceMsg}</Col>
                 </HelpBlock>
               </FormGroup>
 
@@ -176,12 +205,30 @@ class UpdateDrink extends Component {
                   />
                 </Col>
               </FormGroup>
+
+              <FormGroup controlId="formImg">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Avatar
+                </Col>
+                <Col sm={10}>
+                  {!this.state.newImage && (
+                    <Image src={this.state.imageUrl} responsive />
+                  )}
+                  {this.state.newImage && (
+                    <Image
+                      src={URL.createObjectURL(this.state.image)}
+                      responsive
+                    />
+                  )}
+                  <FormControl type="file" onChange={this.handleFileSelect} />
+                </Col>
+              </FormGroup>
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="primary" type="submit">
                 Save
               </Button>
-              <Button bsStyle="primary" onClick={this.props.closeUpdate}>
+              <Button bsStyle="primary" onClick={this.handleClose}>
                 Cancel
               </Button>
             </Modal.Footer>

@@ -20,13 +20,13 @@ class ListDrinks extends Component {
   renderDrinks = (drink, i) => {
     return (
       <Col xs={12} md={6} lg={3} className="comment" key={i}>
-        <Thumbnail src="/img/drinks/miami-vice.jpg" alt="242x200">
+        <Thumbnail src={drink.imageUrl} alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
               <div className="btn-group pull-left">
                 <Button
                   bsSize="xsmall"
-                  onClick={() => this.props.removeDrink(drink.name)}>
+                  onClick={() => this.props.removeDrink(drink)}>
                   <Glyphicon glyph="trash" />
                 </Button>
               </div>
