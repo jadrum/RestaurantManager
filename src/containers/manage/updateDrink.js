@@ -10,6 +10,7 @@ import {
   FormControl,
   FormGroup,
   HelpBlock,
+  Image,
   InputGroup,
   Modal
 } from 'react-bootstrap';
@@ -25,7 +26,11 @@ class UpdateDrink extends Component {
       price: '',
       priceValid: true,
       priceMsg: '',
-      desc: ''
+      desc: '',
+      image: null,
+      imageUrl: null,
+      imageRef: null,
+      newImage: false
     };
   }
 
@@ -43,8 +48,12 @@ class UpdateDrink extends Component {
       newDrink: {
         name: this.state.name,
         price: this.state.price,
-        desc: this.state.desc
-      }
+        desc: this.state.desc,
+        image: this.state.image,
+        imageUrl: this.state.imageUrl,
+        imageRef: this.state.imageRef
+      },
+      newImage: this.state.newImage
     });
     this.setState({ name: '' });
     this.setState({ price: '' });
@@ -88,6 +97,10 @@ class UpdateDrink extends Component {
     this.setState({ name: this.props.drink.name });
     this.setState({ price: this.props.drink.price });
     this.setState({ desc: this.props.drink.desc });
+    this.setState({ imageUrl: this.props.drink.imageUrl });
+    if (this.props.drink.imageRef !== undefined) {
+      this.setState({ imageRef: this.props.drink.imageRef });
+    }
   };
 
   nameValidation = () => {
@@ -103,12 +116,19 @@ class UpdateDrink extends Component {
   };
 
   handleClose = () => {
-    console.log('handling close');
     this.setState({ nameValid: '' }); // reset validation
     this.setState({ nameMsg: true });
     this.setState({ priceValid: '' }); // reset validation
     this.setState({ priceMsg: true });
+    this.setState({ image: null }); // reset image state
+    this.setState({ newImage: false });
     this.props.closeUpdate();
+  };
+
+  /* Firebase file storage system functions */
+  handleFileSelect = e => {
+    this.setState({ newImage: true });
+    this.setState({ image: e.target.files[0] });
   };
 
   render() {
@@ -183,6 +203,24 @@ class UpdateDrink extends Component {
                     placeholder="Description"
                     onChange={this.onDescChange}
                   />
+                </Col>
+              </FormGroup>
+
+              <FormGroup controlId="formImg">
+                <Col componentClass={ControlLabel} sm={2}>
+                  Avatar
+                </Col>
+                <Col sm={10}>
+                  {!this.state.newImage && (
+                    <Image src={this.state.imageUrl} responsive />
+                  )}
+                  {this.state.newImage && (
+                    <Image
+                      src={URL.createObjectURL(this.state.image)}
+                      responsive
+                    />
+                  )}
+                  <FormControl type="file" onChange={this.handleFileSelect} />
                 </Col>
               </FormGroup>
             </Modal.Body>
