@@ -19,7 +19,7 @@ class ListDrinks extends Component {
 
   renderDrinks = (drink, i) => {
     return (
-      <Col xs={12} md={6} lg={3} className="comment" key={i}>
+      <Col xs={12} md={6} lg={4} className="comment" key={i}>
         <Thumbnail src={drink.imageUrl} alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
@@ -37,13 +37,15 @@ class ListDrinks extends Component {
                   <Glyphicon glyph="pencil" />
                 </Button>
               </div>
-              <Panel.Title className="text-center" componentClass="h4">
+              <Panel.Title toggle className="text-center" componentClass="h4">
                 {drink.name}
               </Panel.Title>
             </div>
-            <Panel.Body>
-              {drink.desc} - {drink.price}
-            </Panel.Body>
+            <Panel.Collapse>
+              <Panel.Body>
+                {drink.desc} - {drink.price}
+              </Panel.Body>
+            </Panel.Collapse>
           </Panel>
         </Thumbnail>
       </Col>
