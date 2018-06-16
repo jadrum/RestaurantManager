@@ -3,7 +3,7 @@ import { Route, Link } from 'react-router-dom';
 import Home from '../home';
 import About from '../about';
 import Login from '../login';
-import ManageDrinks from '../manage';
+import ManageDrinks from '../manage/drinks';
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 const App = () => (

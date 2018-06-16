@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { removeDrink, fetchDrinks } from '../../actions/drinks';
+import { removeDrink, fetchDrinks } from '../../../actions/drinks';
 import {
   Button,
   Col,
