@@ -10,9 +10,6 @@ import {
 } from '../firebase/firebase';
 import generateRandomID from 'uuid/v4';
 
-export const ADD_DRINK = 'drink/ADD';
-export const REMOVE_DRINK = 'drink/REMOVE';
-export const UPDATE_DRINK = 'drink/UPDATE';
 export const FETCH_DRINKS = 'drinks/FETCH';
 
 /* Gen random id for images */
