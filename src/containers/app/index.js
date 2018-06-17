@@ -5,6 +5,7 @@ import About from '../about';
 import Login from '../login';
 import ManageDrinks from '../manage/drinks';
 import ManageAppetizers from '../manage/appetizers';
+import ManageDesserts from '../manage/desserts';
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 const App = () => (
@@ -25,6 +26,9 @@ const App = () => (
             <MenuItem eventKey={1.2} href="manage-appetizers">
               Appetizers
             </MenuItem>
+            <MenuItem eventKey={1.2} href="manage-desserts">
+              Desserts
+            </MenuItem>
           </NavDropdown>
         </Nav>
         <Nav pullRight>
@@ -44,6 +48,7 @@ const App = () => (
       <Route exact path="/about-us" component={About} />
       <Route exact path="/manage-drinks" component={ManageDrinks} />
       <Route exact path="/manage-appetizers" component={ManageAppetizers} />
+      <Route exact path="/manage-desserts" component={ManageDesserts} />
     </main>
   </div>
 );
