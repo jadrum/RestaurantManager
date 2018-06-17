@@ -13,6 +13,7 @@ firebase.initializeApp(FirebaseConfig);
 
 const db = firebase.database();
 const drinks = db.ref('drinks');
+const appetizers = db.ref('appetizers');
 const storage = firebase.storage();
 const images = storage.ref('images');
 
@@ -37,16 +38,20 @@ db.ref('drinks').on('child_added', snapshot => {
 /**
  * FIREBASE INTERACTION FUNCTIONS FOR DB AND STORAGE
  */
-const addDrinkToFb = (name, data) => {
-  drinks.child(name).set(data); // still upload the drink
+const addToDb = (path, name, data) => {
+  db
+    .ref(path)
+    .child(name)
+    .set(data); // still upload the drink
 };
 
-const updateDrinkInFb = (name, data) => {
-  drinks.child(name).update(data);
+const updateDb = (path, name, data) => {
+  db.ref(path + '/' + name).update(data);
 };
 
-const removeDrinkFromFb = (name, cb) => {
-  drinks
+const removeDb = (path, name, cb) => {
+  db
+    .ref(path)
     .child(name)
     .remove()
     .then(cb)
@@ -55,12 +60,16 @@ const removeDrinkFromFb = (name, cb) => {
     });
 };
 
-const addImageToFb = (name, image) => {
-  return images.child(name).put(image);
+const addStorage = (path, name, image) => {
+  return storage
+    .ref(path)
+    .child(name)
+    .put(image);
 };
 
-const removeImageFromFb = (image, drink) => {
-  images
+const removeStorage = (path, image, drink) => {
+  storage
+    .ref(path)
     .child(image)
     .delete()
     .then(() => {})
@@ -74,18 +83,18 @@ const removeImageFromFb = (image, drink) => {
     });
 };
 
-const getUrlFromFb = (task, name, data, cb) => {
+const getFbUrl = (task, name, data, cb, path) => {
   task.snapshot.ref // try to download the image url
     .getDownloadURL()
     .then(url => {
       // successfully retrieve url
       data.imageUrl = url;
       data.imageRef = name;
-      cb(data.name, data); // upload the drink
+      cb(path, data.name, data); // upload the drink
     })
     .catch(e => {
       console.log("couldn't find drink url");
-      cb(data.name, data); // still upload the drink
+      cb(path, data.name, data); // still upload the drink
     });
 };
 
@@ -110,14 +119,15 @@ const fbTaskHandler = (task, errorCB, completeCB) => {
 export {
   firebase,
   drinks,
+  appetizers,
   storage,
   images,
-  addDrinkToFb,
-  updateDrinkInFb,
-  removeDrinkFromFb,
-  addImageToFb,
-  removeImageFromFb,
-  getUrlFromFb,
+  addToDb,
+  updateDb,
+  removeDb,
+  addStorage,
+  removeStorage,
+  getFbUrl,
   fbTaskHandler,
   db as default
 };

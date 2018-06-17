@@ -1,17 +1,19 @@
 import {
   drinks,
-  addDrinkToFb,
-  updateDrinkInFb,
-  removeDrinkFromFb,
-  addImageToFb,
-  removeImageFromFb,
-  getUrlFromFb,
+  addToDb,
+  updateDb,
+  removeDb,
+  addStorage,
+  removeStorage,
+  getFbUrl,
   fbTaskHandler
-} from '../firebase/firebase';
+} from '../../firebase/firebase';
 import generateRandomID from 'uuid/v4';
 
 export const FETCH_DRINKS = 'drinks/FETCH';
 
+const db = 'drinks';
+const storage = 'images';
 /* Gen random id for images */
 const genRandomFilename = (): string => generateRandomID();
 
@@ -19,22 +21,22 @@ export const addDrink = data => async dispatch => {
   if (data.image) {
     // if there's an image to upload
     let imageName = genRandomFilename(); // get img name
-    let task = addImageToFb(imageName, data.image); // upload to firebase storage
+    let task = addStorage(storage, imageName, data.image); // upload to firebase storage
     fbTaskHandler(
       task,
-      () => addDrinkToFb(data.name, data),
-      () => getUrlFromFb(task, imageName, data, addDrinkToFb)
+      () => addToDb(db, data.name, data),
+      () => getFbUrl(task, imageName, data, addToDb, db)
     );
   } else {
-    addDrinkToFb(data.name, data);
+    addToDb(db, data.name, data);
   }
 };
 
 export const removeDrink = data => async dispatch => {
   if (data.imageRef) {
-    removeImageFromFb(data.imageRef, data.name);
+    removeStorage(storage, data.imageRef, data.name);
   }
-  removeDrinkFromFb(data.name);
+  removeDb(db, data.name);
 };
 
 export const updateDrink = data => async dispatch => {
@@ -47,30 +49,30 @@ export const updateDrink = data => async dispatch => {
   if (data.oldName === data.newDrink.name) {
     if (data.newImage) {
       // new image, same drink name -> update img & drink
-      let task = addImageToFb(imageName, data.newDrink.image); // upload to firebase storage
+      let task = addStorage(storage, imageName, data.newDrink.image); // upload to firebase storage
       fbTaskHandler(
         task,
-        () => updateDrinkInFb(data.newDrink.name, data.newDrink),
-        () => getUrlFromFb(task, imageName, data.newDrink, updateDrinkInFb)
+        () => updateDb(db, data.newDrink.name, data.newDrink),
+        () => getFbUrl(task, imageName, data.newDrink, updateDb, db)
       );
     } else {
       // same image, same drink name -> update drink
-      updateDrinkInFb(data.oldName, data.newDrink);
+      updateDb(db, data.oldName, data.newDrink);
     }
   } else {
-    removeDrinkFromFb(data.oldName, null); // remove old drink
+    removeDb(db, data.oldName, null); // remove old drink
     if (data.newImage) {
       // new image, diff drink name -> delete drink, add img/drink, async
       // doesn't matter so we just add after deleting old cuz of new name
-      let task = addImageToFb(imageName, data.newDrink.image); // upload to firebase storage
+      let task = addStorage(storage, imageName, data.newDrink.image); // upload to firebase storage
       fbTaskHandler(
         task,
-        () => addDrinkToFb(data.newDrink.name, data.newDrink),
-        () => getUrlFromFb(task, imageName, data.newDrink, addDrinkToFb)
+        () => addToDb(db, data.newDrink.name, data.newDrink),
+        () => getFbUrl(task, imageName, data.newDrink, addToDb, db)
       );
     } else {
       // same image, diff drink name -> delete drink, add drink
-      addDrinkToFb(data.newDrink.name, data.newDrink);
+      addToDb(db, data.newDrink.name, data.newDrink);
     }
   }
 };

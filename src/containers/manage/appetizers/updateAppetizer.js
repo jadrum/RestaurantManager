@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { addDrink } from '../../actions/drinks';
+import { updateAppetizer } from '../../../actions/manage/appetizers';
 import {
   Button,
   Col,
@@ -15,23 +15,26 @@ import {
   Modal
 } from 'react-bootstrap';
 
-class AddDrink extends Component {
+class UpdateAppetizer extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       name: '',
       nameValid: true,
-      nameError: '',
+      nameMsg: '',
       price: '',
       priceValid: true,
-      priceError: '',
+      priceMsg: '',
       desc: '',
-      image: null // image for drink and firebase
+      image: null,
+      imageUrl: null,
+      imageRef: null,
+      newImage: false
     };
   }
 
-  submitDrink = e => {
+  submitAppetizer = e => {
     e.preventDefault();
     /* Check for errors before submitting */
     if (
@@ -40,36 +43,35 @@ class AddDrink extends Component {
     ) {
       return;
     }
-    this.props.addDrink({
-      name: this.state.name,
-      price: this.state.price,
-      desc: this.state.desc,
-      image: this.state.image,
-      imageUrl: '/img/drinks/default.jpg',
-      imageRef: null
+    this.props.updateAppetizer({
+      oldName: this.props.appetizer.name,
+      newAppetizer: {
+        name: this.state.name,
+        price: this.state.price,
+        desc: this.state.desc,
+        image: this.state.image,
+        imageUrl: this.state.imageUrl,
+        imageRef: this.state.imageRef
+      },
+      newImage: this.state.newImage
     });
     this.setState({ name: '' });
     this.setState({ price: '' });
     this.setState({ desc: '' });
-    this.setState({ image: null });
-    this.props.closeAdd();
+    this.props.closeUpdate();
   };
 
   onNameChange = e => {
-    let n = e.target.value; // the new drink name
-    if (this.props.drinks) {
-      if (this.props.drinks[n]) {
-        this.setState({ nameError: 'Name already in use.' });
-        this.setState({ nameValid: false });
-      } else {
-        this.setState({ nameError: '' }); // Everythings all good
-        this.setState({ nameValid: true });
-      }
+    let old = this.props.appetizer.name; // the old appetizer name
+    let n = e.target.value; // the new appetizer name
+    if (old !== n && this.props.appetizers[n]) {
+      this.setState({ nameMsg: 'Name already in use.' });
+      this.setState({ nameValid: false });
     } else if (n === '') {
-      this.setState({ nameError: 'Name field is required.' });
+      this.setState({ nameMsg: 'Name field is required.' });
       this.setState({ nameValid: false });
     } else {
-      this.setState({ nameError: '' }); // Everythings all good
+      this.setState({ nameMsg: '' }); // Everythings all good
       this.setState({ nameValid: true });
     }
     this.setState({ name: n }); // allow the name change
@@ -78,16 +80,28 @@ class AddDrink extends Component {
   onPriceChange = e => {
     let p = e.target.value;
     if (p === '') {
-      this.setState({ priceError: 'Price field is required.' });
+      this.setState({ priceMsg: 'Price field is required.' });
       this.setState({ priceValid: false });
     } else {
-      this.setState({ priceError: '' });
+      this.setState({ priceMsg: '' });
       this.setState({ priceValid: true });
     }
     this.setState({ price: p });
   };
 
-  onDescChange = e => this.setState({ desc: e.target.value });
+  onDescChange = e => {
+    this.setState({ desc: e.target.value });
+  };
+
+  handleEnter = () => {
+    this.setState({ name: this.props.appetizer.name });
+    this.setState({ price: this.props.appetizer.price });
+    this.setState({ desc: this.props.appetizer.desc });
+    this.setState({ imageUrl: this.props.appetizer.imageUrl });
+    if (this.props.appetizer.imageRef !== undefined) {
+      this.setState({ imageRef: this.props.appetizer.imageRef });
+    }
+  };
 
   nameValidation = () => {
     if (this.state.nameValid === false) {
@@ -101,17 +115,33 @@ class AddDrink extends Component {
     }
   };
 
+  handleClose = () => {
+    this.setState({ nameValid: '' }); // reset validation
+    this.setState({ nameMsg: true });
+    this.setState({ priceValid: '' }); // reset validation
+    this.setState({ priceMsg: true });
+    this.setState({ image: null }); // reset image state
+    this.setState({ newImage: false });
+    this.props.closeUpdate();
+  };
+
   /* Firebase file storage system functions */
-  handleFileSelect = e => this.setState({ image: e.target.files[0] });
+  handleFileSelect = e => {
+    this.setState({ newImage: true });
+    this.setState({ image: e.target.files[0] });
+  };
 
   render() {
     return (
       <div>
-        <Modal show={this.props.showAddModal} onHide={this.props.closeAdd}>
+        <Modal
+          show={this.props.showUpdateModal}
+          onHide={this.handleClose}
+          onEnter={this.handleEnter}>
           <Modal.Header closeButton>
-            <Modal.Title>Create drink</Modal.Title>
+            <Modal.Title>Update appetizer</Modal.Title>
           </Modal.Header>
-          <Form horizontal onSubmit={this.submitDrink}>
+          <Form horizontal onSubmit={this.submitAppetizer}>
             <Modal.Body>
               <FormGroup
                 controlId="formName"
@@ -121,7 +151,7 @@ class AddDrink extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl
-                    componentClass="textarea"
+                    componentClass="input"
                     name="name"
                     value={this.state.name}
                     placeholder="Name"
@@ -131,7 +161,7 @@ class AddDrink extends Component {
                 </Col>
                 <HelpBlock>
                   <Col sm={2} />
-                  <Col sm={10}>{this.state.nameError}</Col>
+                  <Col sm={10}>{this.state.nameMsg}</Col>
                 </HelpBlock>
               </FormGroup>
 
@@ -158,7 +188,7 @@ class AddDrink extends Component {
                 </Col>
                 <HelpBlock>
                   <Col sm={2} />
-                  <Col sm={10}>{this.state.priceError}</Col>
+                  <Col sm={10}>{this.state.priceMsg}</Col>
                 </HelpBlock>
               </FormGroup>
 
@@ -181,7 +211,10 @@ class AddDrink extends Component {
                   Avatar
                 </Col>
                 <Col sm={10}>
-                  {this.state.image && (
+                  {!this.state.newImage && (
+                    <Image src={this.state.imageUrl} responsive />
+                  )}
+                  {this.state.newImage && (
                     <Image
                       src={URL.createObjectURL(this.state.image)}
                       responsive
@@ -193,9 +226,9 @@ class AddDrink extends Component {
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="primary" type="submit">
-                Add
+                Save
               </Button>
-              <Button bsStyle="primary" onClick={this.props.closeAdd}>
+              <Button bsStyle="primary" onClick={this.handleClose}>
                 Cancel
               </Button>
             </Modal.Footer>
@@ -207,7 +240,7 @@ class AddDrink extends Component {
 }
 
 const mapStateToProps = state => ({
-  drinks: state.drinks.drinks
+  appetizers: state.appetizers.appetizers
 });
 
-export default connect(mapStateToProps, { addDrink })(AddDrink);
+export default connect(mapStateToProps, { updateAppetizer })(UpdateAppetizer);

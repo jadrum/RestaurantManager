@@ -3,7 +3,8 @@ import { Route, Link } from 'react-router-dom';
 import Home from '../home';
 import About from '../about';
 import Login from '../login';
-import ManageDrinks from '../manage';
+import ManageDrinks from '../manage/drinks';
+import ManageAppetizers from '../manage/appetizers';
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
 const App = () => (
@@ -20,6 +21,9 @@ const App = () => (
           <NavDropdown eventKey={1} title="Manage Menu" id="basic-nav-dropdown">
             <MenuItem eventKey={1.1} href="manage-drinks">
               Drinks
+            </MenuItem>
+            <MenuItem eventKey={1.2} href="manage-appetizers">
+              Appetizers
             </MenuItem>
           </NavDropdown>
         </Nav>
@@ -39,6 +43,7 @@ const App = () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/about-us" component={About} />
       <Route exact path="/manage-drinks" component={ManageDrinks} />
+      <Route exact path="/manage-appetizers" component={ManageAppetizers} />
     </main>
   </div>
 );
