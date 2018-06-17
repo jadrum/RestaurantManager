@@ -14,6 +14,7 @@ firebase.initializeApp(FirebaseConfig);
 const db = firebase.database();
 const drinks = db.ref('drinks');
 const appetizers = db.ref('appetizers');
+const desserts = db.ref('desserts');
 const storage = firebase.storage();
 const images = storage.ref('images');
 
@@ -120,6 +121,7 @@ export {
   firebase,
   drinks,
   appetizers,
+  desserts,
   storage,
   images,
   addToDb,
