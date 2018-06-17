@@ -13,6 +13,7 @@ firebase.initializeApp(FirebaseConfig);
 
 const db = firebase.database();
 const drinks = db.ref('drinks');
+const appetizers = db.ref('appetizers');
 const storage = firebase.storage();
 const images = storage.ref('images');
 
@@ -118,6 +119,7 @@ const fbTaskHandler = (task, errorCB, completeCB) => {
 export {
   firebase,
   drinks,
+  appetizers,
   storage,
   images,
   addToDb,

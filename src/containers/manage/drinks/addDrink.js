@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { addDrink } from '../../../actions/drinks';
+import { addDrink } from '../../../actions/manage/drinks';
 import {
   Button,
   Col,

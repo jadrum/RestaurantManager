@@ -7,7 +7,7 @@ import {
   removeStorage,
   getFbUrl,
   fbTaskHandler
-} from '../firebase/firebase';
+} from '../../firebase/firebase';
 import generateRandomID from 'uuid/v4';
 
 export const FETCH_DRINKS = 'drinks/FETCH';

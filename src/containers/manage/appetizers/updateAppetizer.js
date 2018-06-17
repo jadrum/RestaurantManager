@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateDrink } from '../../../actions/manage/drinks';
+import { updateAppetizer } from '../../../actions/manage/appetizers';
 import {
   Button,
   Col,
@@ -15,7 +15,7 @@ import {
   Modal
 } from 'react-bootstrap';
 
-class UpdateDrink extends Component {
+class UpdateAppetizer extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -34,7 +34,7 @@ class UpdateDrink extends Component {
     };
   }
 
-  submitDrink = e => {
+  submitAppetizer = e => {
     e.preventDefault();
     /* Check for errors before submitting */
     if (
@@ -43,9 +43,9 @@ class UpdateDrink extends Component {
     ) {
       return;
     }
-    this.props.updateDrink({
-      oldName: this.props.drink.name,
-      newDrink: {
+    this.props.updateAppetizer({
+      oldName: this.props.appetizer.name,
+      newAppetizer: {
         name: this.state.name,
         price: this.state.price,
         desc: this.state.desc,
@@ -62,9 +62,9 @@ class UpdateDrink extends Component {
   };
 
   onNameChange = e => {
-    let old = this.props.drink.name; // the old drink name
-    let n = e.target.value; // the new drink name
-    if (old !== n && this.props.drinks[n]) {
+    let old = this.props.appetizer.name; // the old appetizer name
+    let n = e.target.value; // the new appetizer name
+    if (old !== n && this.props.appetizers[n]) {
       this.setState({ nameMsg: 'Name already in use.' });
       this.setState({ nameValid: false });
     } else if (n === '') {
@@ -94,12 +94,12 @@ class UpdateDrink extends Component {
   };
 
   handleEnter = () => {
-    this.setState({ name: this.props.drink.name });
-    this.setState({ price: this.props.drink.price });
-    this.setState({ desc: this.props.drink.desc });
-    this.setState({ imageUrl: this.props.drink.imageUrl });
-    if (this.props.drink.imageRef !== undefined) {
-      this.setState({ imageRef: this.props.drink.imageRef });
+    this.setState({ name: this.props.appetizer.name });
+    this.setState({ price: this.props.appetizer.price });
+    this.setState({ desc: this.props.appetizer.desc });
+    this.setState({ imageUrl: this.props.appetizer.imageUrl });
+    if (this.props.appetizer.imageRef !== undefined) {
+      this.setState({ imageRef: this.props.appetizer.imageRef });
     }
   };
 
@@ -139,9 +139,9 @@ class UpdateDrink extends Component {
           onHide={this.handleClose}
           onEnter={this.handleEnter}>
           <Modal.Header closeButton>
-            <Modal.Title>Update drink</Modal.Title>
+            <Modal.Title>Update appetizer</Modal.Title>
           </Modal.Header>
-          <Form horizontal onSubmit={this.submitDrink}>
+          <Form horizontal onSubmit={this.submitAppetizer}>
             <Modal.Body>
               <FormGroup
                 controlId="formName"
@@ -240,7 +240,7 @@ class UpdateDrink extends Component {
 }
 
 const mapStateToProps = state => ({
-  drinks: state.drinks.drinks
+  appetizers: state.appetizers.appetizers
 });
 
-export default connect(mapStateToProps, { updateDrink })(UpdateDrink);
+export default connect(mapStateToProps, { updateAppetizer })(UpdateAppetizer);
