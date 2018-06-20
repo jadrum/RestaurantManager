@@ -1,37 +1,26 @@
 import React from 'react';
-import { Component } from 'react';
-import { push } from 'react-router-redux';
-import { bindActionCreators } from 'redux';
+//import { push } from 'react-router-redux'
 import { connect } from 'react-redux';
-import { Grid, Jumbotron, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { startLogin } from '../../actions/auth/auth';
 
-class Home extends Component {
-  render() {
-    return (
-      <div>
-        <Grid>
-          <Row>
-            <Jumbotron>
-              <h1>JDB Burger Bar</h1>
-              <p>
-                This is a restaurant POS system app for the fictional restaurant
-                JDB Burger Bar (named after the developers Justin, Dylan, and
-                Brandon). This app will allow restaurant employees to manage
-                their menu, wait on customers, take orders, close tabs, and
-                hopefully much more. Feel free to browse around as we are still
-                in production.
-              </p>
-            </Jumbotron>
-          </Row>
-        </Grid>
-      </div>
-    );
-  }
-}
+const Home = ({ startLogin }) => (
+  <div>
+    <h1>Login</h1>
+    <div>
+      <Button onClick={startLogin}>Login</Button>
+    </div>
+    <div>
+      <Button>Register restaurant</Button>
+    </div>
+    <div>
+      <Button>Continue as guest</Button>
+    </div>
+  </div>
+);
 
-const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+  startLogin: () => dispatch(startLogin())
+});
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ changePage: () => push('/about-us') }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(null, mapDispatchToProps)(Home);

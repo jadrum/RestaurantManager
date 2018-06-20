@@ -17,6 +17,7 @@ const appetizers = db.ref('appetizers');
 const desserts = db.ref('desserts');
 const storage = firebase.storage();
 const images = storage.ref('images');
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 /**
  * FIREBASE EVENT LISTENERS
@@ -131,5 +132,6 @@ export {
   removeStorage,
   getFbUrl,
   fbTaskHandler,
+  googleAuthProvider,
   db as default
 };
