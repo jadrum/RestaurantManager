@@ -1,8 +1,9 @@
 import React from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Router, Switch } from 'react-router-dom';
 import { history } from '../../store';
 import PrivateRoute from './privateRoute';
-import Home from '../home';
+import PublicRoute from './publicRoute';
+import Home from '../login';
 import Dashboard from '../dashboard';
 import About from '../about';
 import ManageDrinks from '../manage/drinks';
@@ -13,7 +14,7 @@ const AppRouter = () => (
   <Router history={history}>
     <div>
       <Switch>
-        <Route exact path="/" component={Home} />
+        <PublicRoute exact path="/" component={Home} />
         <PrivateRoute exact path="/dashboard" component={Dashboard} />
         <PrivateRoute exact path="/about-us" component={About} />
         <PrivateRoute exact path="/manage-drinks" component={ManageDrinks} />
