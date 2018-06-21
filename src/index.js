@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import store, { history } from './store';
 import { firebase } from './firebase/firebase';
-import { login, logout } from './actions/auth/auth';
+import { login, initDataAsync, logout } from './actions/auth/auth';
 import AppRouter from './containers/routes/appRouter';
 
 import 'sanitize.css/sanitize.css';
@@ -30,6 +30,15 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log('log in');
     store.dispatch(login(user.uid));
+    store.dispatch(initDataAsync(user.uid)); // this breaks routing
+    /*    this fixes routing?
+    store.dispatch(login(
+      'asdf',
+      'fdsa',
+      'ADMIN',
+      'Sammy\'s'
+    ));
+    */
     renderApp();
     if (history.location.pathname === '/') {
       // send to dashboard after login

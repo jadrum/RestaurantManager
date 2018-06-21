@@ -1,7 +1,7 @@
 import { firebase } from '../../firebase/firebase';
-import { LOGIN, LOGOUT } from '../../reducers/auth/auth';
+import { LOGIN, INITDATA, LOGOUT } from '../../reducers/auth/auth';
 import generateRandomID from 'uuid/v4';
-import { addToDb } from '../../firebase/firebase';
+import { addToDb, getDb } from '../../firebase/firebase';
 
 /* Gen random id for images */
 const genRandomID = (): string => generateRandomID();
@@ -37,10 +37,41 @@ export const addRestaurant = data => async dispatch => {
   addToDb(USERS, user, data); // add user
 };
 
-export const login = uid => ({
-  type: LOGIN,
-  uid
-});
+export const login = (uid, restaurant, clearance, restaurantName) => {
+  return {
+    type: LOGIN,
+    uid
+  };
+};
+
+export const initData = (restaurant, clearance, restaurantName) => {
+  return {
+    type: INITDATA,
+    clearance,
+    restaurant,
+    restaurantName
+  };
+};
+
+export const initDataAsync = uid => {
+  return dispatch => {
+    getDb('users', uid) // getting user info
+      .then(
+        dataSnapshot => {
+          let { clearance, restaurant } = dataSnapshot.val();
+          getDb('restaurants', restaurant + '/name') // get restaurant name
+            .then(dataSnapshot => {
+              dispatch(initData(clearance, restaurant, dataSnapshot.val()));
+            });
+        },
+        error => {
+          console.log('user not found in the database');
+          console.log('error code: ', error.code);
+          console.log('error message: ', error.message);
+        }
+      );
+  };
+};
 
 /**
  * TODO: ADD ERROR HANDLING, RETURN AN ERROR

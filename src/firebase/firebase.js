@@ -62,6 +62,13 @@ const removeDb = (path, name, cb) => {
     });
 };
 
+const getDb = (path, name) => {
+  return db
+    .ref(path)
+    .child(name)
+    .once('value');
+};
+
 const addStorage = (path, name, image) => {
   return storage
     .ref(path)
@@ -128,6 +135,7 @@ export {
   addToDb,
   updateDb,
   removeDb,
+  getDb,
   addStorage,
   removeStorage,
   getFbUrl,

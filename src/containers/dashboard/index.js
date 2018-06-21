@@ -5,12 +5,14 @@ import { Grid, Jumbotron, Row } from 'react-bootstrap';
 
 class Dashboard extends Component {
   render() {
+    console.log('auth = ', this.props.restaurantName);
+    const name = 'rest name';
     return (
       <div>
         <Grid>
           <Row>
             <Jumbotron>
-              <h1>JDB Burger Bar</h1>
+              <h1>{this.props.restaurantName}</h1>
               <p>
                 This is a restaurant POS system app for the fictional restaurant
                 JDB Burger Bar (named after the developers Justin, Dylan, and
@@ -27,8 +29,10 @@ class Dashboard extends Component {
   }
 }
 
-//const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  restaurantName: state.auth.restaurantName
+});
 
 //const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
-export default connect(null, null)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);
