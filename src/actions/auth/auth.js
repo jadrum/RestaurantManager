@@ -44,7 +44,7 @@ export const login = (uid, restaurant, clearance, restaurantName) => {
   };
 };
 
-export const initData = (restaurant, clearance, restaurantName) => {
+export const initData = (clearance, restaurant, restaurantName) => {
   return {
     type: INITDATA,
     clearance,

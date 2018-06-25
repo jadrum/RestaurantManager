@@ -29,17 +29,9 @@ const renderApp = () => {
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     console.log('log in');
-    store.dispatch(login(user.uid));
-    store.dispatch(initDataAsync(user.uid)); // this breaks routing
-    /*    this fixes routing?
-    store.dispatch(login(
-      'asdf',
-      'fdsa',
-      'ADMIN',
-      'Sammy\'s'
-    ));
-    */
-    renderApp();
+    store.dispatch(login(user.uid)); // sets user ID so render works
+    store.dispatch(initDataAsync(user.uid)); // get initialize data
+    renderApp(); // render that sh1t
     if (history.location.pathname === '/') {
       // send to dashboard after login
       history.push('/dashboard');

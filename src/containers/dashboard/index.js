@@ -5,8 +5,6 @@ import { Grid, Jumbotron, Row } from 'react-bootstrap';
 
 class Dashboard extends Component {
   render() {
-    console.log('auth = ', this.props.restaurantName);
-    const name = 'rest name';
     return (
       <div>
         <Grid>

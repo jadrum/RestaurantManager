@@ -14,7 +14,7 @@ import {
 
 class ListDrinks extends Component {
   componentWillMount() {
-    this.props.fetchDrinks(); // effectively sets up state by listening to firebase
+    this.props.fetchDrinks(this.props.rid); // effectively sets up state by listening to firebase
   }
 
   renderDrinks = (drink, i) => {
@@ -26,7 +26,7 @@ class ListDrinks extends Component {
               <div className="btn-group pull-left">
                 <Button
                   bsSize="xsmall"
-                  onClick={() => this.props.removeDrink(drink)}>
+                  onClick={() => this.props.removeDrink(this.props.rid, drink)}>
                   <Glyphicon glyph="trash" />
                 </Button>
               </div>
@@ -54,7 +54,7 @@ class ListDrinks extends Component {
 
   render() {
     let comp;
-    if (this.props.drinks) {
+    if (this.props.drinks && this.props.rid) {
       comp = (
         <Grid>
           <Row>{Object.values(this.props.drinks).map(this.renderDrinks)}</Row>
