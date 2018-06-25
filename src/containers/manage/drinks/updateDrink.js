@@ -44,6 +44,7 @@ class UpdateDrink extends Component {
       return;
     }
     this.props.updateDrink({
+      rid: this.props.rid,
       oldName: this.props.drink.name,
       newDrink: {
         name: this.state.name,

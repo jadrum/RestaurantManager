@@ -17,6 +17,7 @@ const appetizers = db.ref('appetizers');
 const desserts = db.ref('desserts');
 const storage = firebase.storage();
 const images = storage.ref('images');
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 /**
  * FIREBASE EVENT LISTENERS
@@ -59,6 +60,13 @@ const removeDb = (path, name, cb) => {
     .catch(e => {
       console.log('Error removing drink: ', name, ' error status: ', e);
     });
+};
+
+const getDb = (path, name) => {
+  return db
+    .ref(path)
+    .child(name)
+    .once('value');
 };
 
 const addStorage = (path, name, image) => {
@@ -127,9 +135,11 @@ export {
   addToDb,
   updateDb,
   removeDb,
+  getDb,
   addStorage,
   removeStorage,
   getFbUrl,
   fbTaskHandler,
+  googleAuthProvider,
   db as default
 };

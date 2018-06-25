@@ -40,7 +40,7 @@ class AddDrink extends Component {
     ) {
       return;
     }
-    this.props.addDrink({
+    this.props.addDrink(this.props.rid, {
       name: this.state.name,
       price: this.state.price,
       desc: this.state.desc,
@@ -207,7 +207,8 @@ class AddDrink extends Component {
 }
 
 const mapStateToProps = state => ({
-  drinks: state.drinks.drinks
+  drinks: state.drinks.drinks,
+  rid: state.auth.rid
 });
 
 export default connect(mapStateToProps, { addDrink })(AddDrink);
