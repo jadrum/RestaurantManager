@@ -19,6 +19,7 @@ button:disabled {
 .input-group-addon {
   background-color: #fff;
 }
+
 /** removing line to right of $ sign in input **/
 .input-group .input-group-addon + .form-control {
   border-left: none;
@@ -38,6 +39,53 @@ button:disabled {
   border-radius: 5%;
   height: 16rem;
   border: solid 1px #cccccc;
+}
+
+.full-page {
+  background: #0073e6;
+  width: 100%;
+  height: 100vh;
+}
+
+.login-form {
+  padding: 2.5vh 50px 0 50px;
+}
+
+.register-form {
+  padding: 25vh 50px 0 50px;
+}
+
+.home-info {
+  padding: 50% 20%;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.home-title {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.h-100 {
+  height: 100vh;
+}
+
+.blue {
+  height: 100%;
+  background-color: #245580;
+}
+
+.less-padding {
+  padding-right: 0px;
+}
+
+.top-padding {
+  padding-top: 2.5vh;
+}
+
+.bottom-padding {
+  padding-bottom: 2.5vh;
 }
 
 /* override bootstrap navbar colors

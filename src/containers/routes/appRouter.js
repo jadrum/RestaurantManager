@@ -12,24 +12,18 @@ import ManageDesserts from '../manage/desserts';
 
 const AppRouter = () => (
   <Router history={history}>
-    <div>
-      <Switch>
-        <PublicRoute exact path="/" component={Home} />
-        <PrivateRoute exact path="/dashboard" component={Dashboard} />
-        <PrivateRoute exact path="/about-us" component={About} />
-        <PrivateRoute exact path="/manage-drinks" component={ManageDrinks} />
-        <PrivateRoute
-          exact
-          path="/manage-appetizers"
-          component={ManageAppetizers}
-        />
-        <PrivateRoute
-          exact
-          path="/manage-desserts"
-          component={ManageDesserts}
-        />
-      </Switch>
-    </div>
+    <Switch>
+      <PublicRoute exact path="/" component={Home} />
+      <PrivateRoute exact path="/dashboard" component={Dashboard} />
+      <PrivateRoute exact path="/about-us" component={About} />
+      <PrivateRoute exact path="/manage-drinks" component={ManageDrinks} />
+      <PrivateRoute
+        exact
+        path="/manage-appetizers"
+        component={ManageAppetizers}
+      />
+      <PrivateRoute exact path="/manage-desserts" component={ManageDesserts} />
+    </Switch>
   </Router>
 );
 

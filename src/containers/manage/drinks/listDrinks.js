@@ -20,7 +20,7 @@ class ListDrinks extends Component {
   renderDrinks = (drink, i) => {
     return (
       <Col xs={12} md={6} lg={4} className="comment" key={i}>
-        <Thumbnail src={drink.imageUrl} alt="242x200">
+        <Thumbnail className="hi" src={drink.imageUrl} alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
               <div className="btn-group pull-left">
@@ -72,6 +72,7 @@ const mapStateToProps = state => ({
   drinks: state.drinks.drinks
 });
 
-export default connect(mapStateToProps, { removeDrink, fetchDrinks })(
-  ListDrinks
-);
+export default connect(
+  mapStateToProps,
+  { removeDrink, fetchDrinks }
+)(ListDrinks);
