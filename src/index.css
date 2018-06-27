@@ -35,7 +35,8 @@ button:disabled {
 
 /** Used to get the thumbnails to be the same size **/
 .thumbnail a > img,
-.thumbnail > img {
+.thumbnail > img,
+.image {
   border-radius: 5%;
   height: 16rem;
   border: solid 1px #cccccc;

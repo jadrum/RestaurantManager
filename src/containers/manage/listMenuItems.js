@@ -1,10 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  removeAppetizer,
-  fetchAppetizers
-} from '../../../actions/manage/appetizers';
+import { removeItem, fetchItems } from '../../actions/manage/menuItems';
 import {
   Button,
   Col,
@@ -15,38 +12,44 @@ import {
   Thumbnail
 } from 'react-bootstrap';
 
-class ListAppetizers extends Component {
+class ListMenuItems extends Component {
   componentWillMount() {
-    this.props.fetchAppetizers(); // effectively sets up state by listening to firebase
+    this.props.fetchItems(this.props.rid, this.props.menuItem); // effectively sets up state by listening to firebase
   }
 
-  renderAppetizers = (appetizer, i) => {
+  renderItems = (item, i) => {
     return (
       <Col xs={12} md={6} lg={4} className="comment" key={i}>
-        <Thumbnail src={appetizer.imageUrl} alt="242x200">
+        <Thumbnail className="hi" src={item.imageUrl} alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
               <div className="btn-group pull-left">
                 <Button
                   bsSize="xsmall"
-                  onClick={() => this.props.removeAppetizer(appetizer)}>
+                  onClick={() =>
+                    this.props.removeItem(
+                      this.props.rid,
+                      this.props.menuItem,
+                      item
+                    )
+                  }>
                   <Glyphicon glyph="trash" />
                 </Button>
               </div>
               <div className="btn-group pull-right">
                 <Button
                   bsSize="xsmall"
-                  onClick={() => this.props.showUpdate(appetizer)}>
+                  onClick={() => this.props.showUpdate(item)}>
                   <Glyphicon glyph="pencil" />
                 </Button>
               </div>
               <Panel.Title toggle className="text-center" componentClass="h4">
-                {appetizer.name}
+                {item.name}
               </Panel.Title>
             </div>
             <Panel.Collapse>
               <Panel.Body>
-                {appetizer.desc} - {appetizer.price}
+                {item.desc} - {item.price}
               </Panel.Body>
             </Panel.Collapse>
           </Panel>
@@ -57,12 +60,10 @@ class ListAppetizers extends Component {
 
   render() {
     let comp;
-    if (this.props.appetizers) {
+    if (this.props.items && this.props.rid) {
       comp = (
         <Grid>
-          <Row>
-            {Object.values(this.props.appetizers).map(this.renderAppetizers)}
-          </Row>
+          <Row>{Object.values(this.props.items).map(this.renderItems)}</Row>
         </Grid>
       );
     } else {
@@ -74,9 +75,10 @@ class ListAppetizers extends Component {
 }
 
 const mapStateToProps = state => ({
-  appetizers: state.appetizers.appetizers
+  items: state.menuItems.items
 });
 
-export default connect(mapStateToProps, { removeAppetizer, fetchAppetizers })(
-  ListAppetizers
-);
+export default connect(
+  mapStateToProps,
+  { removeItem, fetchItems }
+)(ListMenuItems);

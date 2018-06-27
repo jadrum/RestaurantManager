@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 //import { push } from 'react-router-redux'
-import { Button, Col, Glyphicon, Row, Thumbnail } from 'react-bootstrap';
+import { Button, Col, Glyphicon, Row } from 'react-bootstrap';
 import Login from './login';
 import Register from './register';
 import 'normalize.css/normalize.css';
