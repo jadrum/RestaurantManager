@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateAppetizer } from '../../../actions/manage/appetizers';
+import { addItem } from '../../actions/manage/menuItems';
 import {
   Button,
   Col,
@@ -15,26 +15,23 @@ import {
   Modal
 } from 'react-bootstrap';
 
-class UpdateAppetizer extends Component {
+class AddMenuItem extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       name: '',
       nameValid: true,
-      nameMsg: '',
+      nameError: '',
       price: '',
       priceValid: true,
-      priceMsg: '',
+      priceError: '',
       desc: '',
-      image: null,
-      imageUrl: null,
-      imageRef: null,
-      newImage: false
+      image: null // image for item and firebase
     };
   }
 
-  submitAppetizer = e => {
+  submitItem = e => {
     e.preventDefault();
     /* Check for errors before submitting */
     if (
@@ -43,35 +40,36 @@ class UpdateAppetizer extends Component {
     ) {
       return;
     }
-    this.props.updateAppetizer({
-      oldName: this.props.appetizer.name,
-      newAppetizer: {
-        name: this.state.name,
-        price: this.state.price,
-        desc: this.state.desc,
-        image: this.state.image,
-        imageUrl: this.state.imageUrl,
-        imageRef: this.state.imageRef
-      },
-      newImage: this.state.newImage
+    this.props.addItem(this.props.rid, this.props.menuItem, {
+      name: this.state.name,
+      price: this.state.price,
+      desc: this.state.desc,
+      image: this.state.image,
+      imageUrl: '/img' + this.props.menuItem + '/default.jpg',
+      imageRef: null
     });
     this.setState({ name: '' });
     this.setState({ price: '' });
     this.setState({ desc: '' });
-    this.props.closeUpdate();
+    this.setState({ image: null });
+    this.props.closeAdd();
   };
 
   onNameChange = e => {
-    let old = this.props.appetizer.name; // the old appetizer name
-    let n = e.target.value; // the new appetizer name
-    if (old !== n && this.props.appetizers[n]) {
-      this.setState({ nameMsg: 'Name already in use.' });
-      this.setState({ nameValid: false });
+    let n = e.target.value; // the new item name
+    if (this.props.items) {
+      if (this.props.items[n]) {
+        this.setState({ nameError: 'Name already in use.' });
+        this.setState({ nameValid: false });
+      } else {
+        this.setState({ nameError: '' }); // Everythings all good
+        this.setState({ nameValid: true });
+      }
     } else if (n === '') {
-      this.setState({ nameMsg: 'Name field is required.' });
+      this.setState({ nameError: 'Name field is required.' });
       this.setState({ nameValid: false });
     } else {
-      this.setState({ nameMsg: '' }); // Everythings all good
+      this.setState({ nameError: '' }); // Everythings all good
       this.setState({ nameValid: true });
     }
     this.setState({ name: n }); // allow the name change
@@ -80,28 +78,16 @@ class UpdateAppetizer extends Component {
   onPriceChange = e => {
     let p = e.target.value;
     if (p === '') {
-      this.setState({ priceMsg: 'Price field is required.' });
+      this.setState({ priceError: 'Price field is required.' });
       this.setState({ priceValid: false });
     } else {
-      this.setState({ priceMsg: '' });
+      this.setState({ priceError: '' });
       this.setState({ priceValid: true });
     }
     this.setState({ price: p });
   };
 
-  onDescChange = e => {
-    this.setState({ desc: e.target.value });
-  };
-
-  handleEnter = () => {
-    this.setState({ name: this.props.appetizer.name });
-    this.setState({ price: this.props.appetizer.price });
-    this.setState({ desc: this.props.appetizer.desc });
-    this.setState({ imageUrl: this.props.appetizer.imageUrl });
-    if (this.props.appetizer.imageRef !== undefined) {
-      this.setState({ imageRef: this.props.appetizer.imageRef });
-    }
-  };
+  onDescChange = e => this.setState({ desc: e.target.value });
 
   nameValidation = () => {
     if (this.state.nameValid === false) {
@@ -115,63 +101,39 @@ class UpdateAppetizer extends Component {
     }
   };
 
-  handleClose = () => {
-    this.setState({ nameValid: '' }); // reset validation
-    this.setState({ nameMsg: true });
-    this.setState({ priceValid: '' }); // reset validation
-    this.setState({ priceMsg: true });
-    this.setState({ image: null }); // reset image state
-    this.setState({ newImage: false });
-    this.props.closeUpdate();
-  };
-
   /* Firebase file storage system functions */
-  handleFileSelect = e => {
-    this.setState({ newImage: true });
-    this.setState({ image: e.target.files[0] });
-  };
+  handleFileSelect = e => this.setState({ image: e.target.files[0] });
 
   render() {
+    // turns '/drinks' --> 'drink' for the page title
+    let type = this.props.menuItem.substring(1, this.props.menuItem.length - 1);
     return (
       <div>
-        <Modal
-          show={this.props.showUpdateModal}
-          onHide={this.handleClose}
-          onEnter={this.handleEnter}>
+        <Modal show={this.props.showAddModal} onHide={this.props.closeAdd}>
           <Modal.Header closeButton>
-            <Modal.Title>Update appetizer</Modal.Title>
+            <Modal.Title>Create {type}</Modal.Title>
           </Modal.Header>
-          <Form horizontal onSubmit={this.submitAppetizer}>
+          <Form horizontal onSubmit={this.submitItem}>
             <Modal.Body>
               <FormGroup
                 controlId="formName"
                 validationState={this.nameValidation()}>
-                <Col componentClass={ControlLabel} sm={2}>
-                  Name
-                </Col>
-                <Col sm={10}>
+                <Col xs={12} sm={8}>
                   <FormControl
-                    componentClass="input"
                     name="name"
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
                     required
                   />
+                  <HelpBlock>{this.state.nameError}</HelpBlock>
                 </Col>
-                <HelpBlock>
-                  <Col sm={2} />
-                  <Col sm={10}>{this.state.nameMsg}</Col>
-                </HelpBlock>
               </FormGroup>
 
               <FormGroup
                 controlId="formPrice"
                 validationState={this.priceValidation()}>
-                <Col componentClass={ControlLabel} sm={2}>
-                  Price
-                </Col>
-                <Col sm={10}>
+                <Col xs={12} sm={4}>
                   <InputGroup>
                     <InputGroup.Addon>$</InputGroup.Addon>
                     <FormControl
@@ -185,11 +147,8 @@ class UpdateAppetizer extends Component {
                       required
                     />
                   </InputGroup>
+                  <HelpBlock>{this.state.priceError}</HelpBlock>
                 </Col>
-                <HelpBlock>
-                  <Col sm={2} />
-                  <Col sm={10}>{this.state.priceMsg}</Col>
-                </HelpBlock>
               </FormGroup>
 
               <FormGroup controlId="formDesc">
@@ -211,11 +170,9 @@ class UpdateAppetizer extends Component {
                   Avatar
                 </Col>
                 <Col sm={10}>
-                  {!this.state.newImage && (
-                    <Image src={this.state.imageUrl} responsive />
-                  )}
-                  {this.state.newImage && (
+                  {this.state.image && (
                     <Image
+                      className="image"
                       src={URL.createObjectURL(this.state.image)}
                       responsive
                     />
@@ -226,9 +183,9 @@ class UpdateAppetizer extends Component {
             </Modal.Body>
             <Modal.Footer>
               <Button bsStyle="primary" type="submit">
-                Save
+                Add
               </Button>
-              <Button bsStyle="primary" onClick={this.handleClose}>
+              <Button bsStyle="primary" onClick={this.props.closeAdd}>
                 Cancel
               </Button>
             </Modal.Footer>
@@ -240,7 +197,11 @@ class UpdateAppetizer extends Component {
 }
 
 const mapStateToProps = state => ({
-  appetizers: state.appetizers.appetizers
+  items: state.menuItems.items,
+  rid: state.auth.rid
 });
 
-export default connect(mapStateToProps, { updateAppetizer })(UpdateAppetizer);
+export default connect(
+  mapStateToProps,
+  { addItem }
+)(AddMenuItem);

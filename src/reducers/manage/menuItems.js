@@ -1,13 +1,13 @@
-export const FETCH_APPETIZERS = 'appetizers/FETCH';
+export const FETCH_ITEMS = 'items/FETCH';
 
 const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_APPETIZERS:
+    case FETCH_ITEMS:
       return {
         ...state,
-        appetizers: action.payload
+        items: action.payload
       };
 
     default:
