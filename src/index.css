@@ -69,7 +69,7 @@ button:disabled {
   left: 0;
   right: 0;
   top: 0;
-  height: 50%;
+  height: 60%;
   width: 100%;
   overflow: hidden;
   padding-top: 20px;
@@ -87,8 +87,8 @@ button:disabled {
 }
 
 .login-index__right__options__mobile {
-  min-height: 60%; /* Fallback for browsers do NOT support vh unit */
-  min-height: 60vh; /* These two lines are counted as one :-)       */
+  min-height: 65%; /* Fallback for browsers do NOT support vh unit */
+  min-height: 65vh; /* These two lines are counted as one :-)       */
 
   display: flex;
   align-items: center;
@@ -113,7 +113,7 @@ button:disabled {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 50%;
+  height: 40%;
   width: 100%;
   overflow: hidden;
   padding-top: 20px;
@@ -133,8 +133,8 @@ button:disabled {
 }
 
 .login-index__left__info__mobile {
-  min-height: 40%; /* Fallback for browsers do NOT support vh unit */
-  min-height: 40vh; /* These two lines are counted as one :-)       */
+  min-height: 30%; /* Fallback for browsers do NOT support vh unit */
+  min-height: 30vh; /* These two lines are counted as one :-)       */
 
   display: flex;
   align-items: center;
