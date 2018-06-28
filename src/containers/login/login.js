@@ -70,7 +70,7 @@ class Login extends Component {
     return (
       <Row className="login-form">
         <form onSubmit={this.handleSubmit}>
-          <Col className="less-padding" xs={12} md={5}>
+          <Col className="less-padding" xs={12} sm={5}>
             <FormGroup
               controlId="email"
               validationState={this.emailValidation()}
@@ -91,7 +91,7 @@ class Login extends Component {
             </FormGroup>
           </Col>
 
-          <Col className="less-padding" xs={12} md={5}>
+          <Col className="less-padding" xs={12} sm={5}>
             <FormGroup
               controlId="password"
               validationState={this.passwordValidation()}
@@ -110,7 +110,7 @@ class Login extends Component {
             </FormGroup>
           </Col>
 
-          <Col className="less-padding" xs={12} md={2}>
+          <Col className="less-padding" xs={12} sm={2}>
             <Button
               block
               bsStyle="primary"
