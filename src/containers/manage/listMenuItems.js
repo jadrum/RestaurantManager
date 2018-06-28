@@ -2,15 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { removeItem, fetchItems } from '../../actions/manage/menuItems';
-import {
-  Button,
-  Col,
-  Glyphicon,
-  Grid,
-  Panel,
-  Row,
-  Thumbnail
-} from 'react-bootstrap';
+import { Button, Col, Glyphicon, Panel, Row, Thumbnail } from 'react-bootstrap';
 
 class ListMenuItems extends Component {
   componentWillMount() {
@@ -18,28 +10,22 @@ class ListMenuItems extends Component {
   }
 
   renderItems = (item, i) => {
+    const { removeItem, rid, menuItem, showUpdate } = this.props;
+
     return (
-      <Col xs={12} md={6} lg={4} className="comment" key={i}>
-        <Thumbnail className="hi" src={item.imageUrl} alt="242x200">
+      <Col xs={12} sm={6} lg={4} key={i}>
+        <Thumbnail src={item.imageUrl} alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
               <div className="btn-group pull-left">
                 <Button
                   bsSize="xsmall"
-                  onClick={() =>
-                    this.props.removeItem(
-                      this.props.rid,
-                      this.props.menuItem,
-                      item
-                    )
-                  }>
+                  onClick={() => removeItem(rid, menuItem, item)}>
                   <Glyphicon glyph="trash" />
                 </Button>
               </div>
               <div className="btn-group pull-right">
-                <Button
-                  bsSize="xsmall"
-                  onClick={() => this.props.showUpdate(item)}>
+                <Button bsSize="xsmall" onClick={() => showUpdate(item)}>
                   <Glyphicon glyph="pencil" />
                 </Button>
               </div>
@@ -59,12 +45,14 @@ class ListMenuItems extends Component {
   };
 
   render() {
+    const { items, rid } = this.props;
+
     let comp;
-    if (this.props.items && this.props.rid) {
+    if (items && rid) {
       comp = (
-        <Grid>
-          <Row>{Object.values(this.props.items).map(this.renderItems)}</Row>
-        </Grid>
+        <Col xs={12}>
+          <Row>{Object.values(items).map(this.renderItems)}</Row>
+        </Col>
       );
     } else {
       comp = null;

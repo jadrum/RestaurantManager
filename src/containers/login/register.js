@@ -78,11 +78,11 @@ class Register extends Component {
   };
 
   render() {
-    const { showRegisterModal } = this.props;
+    const { showRegisterModal, closeRegister } = this.props;
 
     return (
       <div>
-        <Modal show={showRegisterModal} onHide={this.props.closeRegister}>
+        <Modal show={showRegisterModal} onHide={closeRegister}>
           <Modal.Header closeButton>
             <Modal.Title>Register your restaurant</Modal.Title>
           </Modal.Header>
@@ -158,7 +158,10 @@ class Register extends Component {
   }
 }
 
-export default connect(null, {
-  startRegisterUser,
-  addRestaurant
-})(Register);
+export default connect(
+  null,
+  {
+    startRegisterUser,
+    addRestaurant
+  }
+)(Register);

@@ -40,6 +40,19 @@ button:disabled {
   border-radius: 5%;
   height: 16rem;
   border: solid 1px #cccccc;
+  margin: auto;
+  display: block;
+}
+
+/** Used on mobiles for smaller images **/
+.thumbnail a > img,
+.thumbnail > img,
+.image-small {
+  border-radius: 5%;
+  height: 10rem;
+  border: solid 1px #cccccc;
+  margin: auto;
+  display: block;
 }
 
 /**
@@ -94,6 +107,14 @@ button:disabled {
 
 .less-padding {
   padding-right: 0px;
+}
+
+/**
+  * Manage classes
+  */
+.manage-index_rows {
+  margin-right: 0px;
+  margin-left: 0px;
 }
 
 /*

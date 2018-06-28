@@ -5,7 +5,6 @@ import { updateItem } from '../../actions/manage/menuItems';
 import {
   Button,
   Col,
-  ControlLabel,
   Form,
   FormControl,
   FormGroup,
@@ -150,32 +149,22 @@ class UpdateMenuItem extends Component {
               <FormGroup
                 controlId="formName"
                 validationState={this.nameValidation()}>
-                <Col componentClass={ControlLabel} sm={2}>
-                  Name
-                </Col>
-                <Col sm={10}>
+                <Col xs={12}>
                   <FormControl
-                    componentClass="input"
                     name="name"
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
                     required
                   />
+                  <HelpBlock>{this.state.nameError}</HelpBlock>
                 </Col>
-                <HelpBlock>
-                  <Col sm={2} />
-                  <Col sm={10}>{this.state.nameMsg}</Col>
-                </HelpBlock>
               </FormGroup>
 
               <FormGroup
                 controlId="formPrice"
                 validationState={this.priceValidation()}>
-                <Col componentClass={ControlLabel} sm={2}>
-                  Price
-                </Col>
-                <Col sm={10}>
+                <Col xs={12}>
                   <InputGroup>
                     <InputGroup.Addon>$</InputGroup.Addon>
                     <FormControl
@@ -189,18 +178,12 @@ class UpdateMenuItem extends Component {
                       required
                     />
                   </InputGroup>
+                  <HelpBlock>{this.state.priceMsg}</HelpBlock>
                 </Col>
-                <HelpBlock>
-                  <Col sm={2} />
-                  <Col sm={10}>{this.state.priceMsg}</Col>
-                </HelpBlock>
               </FormGroup>
 
               <FormGroup controlId="formDesc">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Description
-                </Col>
-                <Col sm={10}>
+                <Col xs={12}>
                   <FormControl
                     componentClass="textarea"
                     value={this.state.desc}
@@ -211,10 +194,7 @@ class UpdateMenuItem extends Component {
               </FormGroup>
 
               <FormGroup controlId="formImg">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Avatar
-                </Col>
-                <Col sm={10}>
+                <Col xsHidden sm={12}>
                   {!this.state.newImage && (
                     <Image
                       className="image"
@@ -229,11 +209,32 @@ class UpdateMenuItem extends Component {
                       responsive
                     />
                   )}
-                  <FormControl type="file" onChange={this.handleFileSelect} />
+                </Col>
+
+                <Col smHidden mdHidden lgHidden sm={12}>
+                  {!this.state.newImage && (
+                    <Image
+                      className="image-small"
+                      src={this.state.imageUrl}
+                      responsive
+                    />
+                  )}
+                  {this.state.newImage && (
+                    <Image
+                      className="image-small"
+                      src={URL.createObjectURL(this.state.image)}
+                      responsive
+                    />
+                  )}
                 </Col>
               </FormGroup>
             </Modal.Body>
             <Modal.Footer>
+              <input
+                className="pull-left"
+                type="file"
+                onChange={this.handleFileSelect}
+              />
               <Button bsStyle="primary" type="submit">
                 Save
               </Button>

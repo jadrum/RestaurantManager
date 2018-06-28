@@ -67,8 +67,6 @@ class Login extends Component {
   };
 
   render() {
-    const { showLoginModal } = this.props;
-
     return (
       <Row className="login-form">
         <form onSubmit={this.handleSubmit}>

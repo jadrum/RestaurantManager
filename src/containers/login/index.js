@@ -16,38 +16,22 @@ class Home extends Component {
     };
   }
 
-  /** Function used by AddDrink component **/
-  showLogin = () => {
-    this.setState({ showLoginModal: true });
-  };
-
-  /** Function used by AddDrink component **/
-  closeLogin = () => {
-    this.setState({ showLoginModal: false });
-  };
-
-  /** Function used by AddDrink component **/
+  /** Function used by register component **/
   showRegister = () => {
     this.setState({ showRegisterModal: true });
   };
 
-  /** Function used by AddDrink component **/
+  /** Function used by register component **/
   closeRegister = () => {
     this.setState({ showRegisterModal: false });
   };
 
   render() {
-    const { startLogin } = this.props;
-
     return (
       <Grid fluid>
         <Row>
           <Col className="pull-right login-index__right" xs={12} sm={6}>
-            <Login
-              showLoginModal={this.state.showLoginModal}
-              closeLogin={this.closeLogin}
-              startLogin={startLogin}
-            />
+            <Login />
             <Register
               showRegisterModal={this.state.showRegisterModal}
               closeRegister={this.closeRegister}
@@ -56,7 +40,7 @@ class Home extends Component {
               <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
                 <Row>Start managing your restaurant with ease today!</Row>
                 <Row>
-                  <Button block bsStyle="primary">
+                  <Button block bsStyle="primary" onClick={this.showRegister}>
                     Register your restaurant
                   </Button>
                 </Row>
