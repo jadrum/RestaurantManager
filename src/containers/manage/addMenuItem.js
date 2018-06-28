@@ -5,7 +5,6 @@ import { addItem } from '../../actions/manage/menuItems';
 import {
   Button,
   Col,
-  ControlLabel,
   Form,
   FormControl,
   FormGroup,
@@ -105,93 +104,100 @@ class AddMenuItem extends Component {
   handleFileSelect = e => this.setState({ image: e.target.files[0] });
 
   render() {
+    const { menuItem, showAddModal, closeAdd } = this.props; // destructure props
+
     // turns '/drinks' --> 'drink' for the page title
-    let type = this.props.menuItem.substring(1, this.props.menuItem.length - 1);
+    let type = menuItem.substring(1, menuItem.length - 1);
     return (
-      <div>
-        <Modal show={this.props.showAddModal} onHide={this.props.closeAdd}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create {type}</Modal.Title>
-          </Modal.Header>
-          <Form horizontal onSubmit={this.submitItem}>
-            <Modal.Body>
-              <FormGroup
-                controlId="formName"
-                validationState={this.nameValidation()}>
-                <Col xs={12} sm={8}>
+      <Modal show={showAddModal} onHide={closeAdd}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create {type}</Modal.Title>
+        </Modal.Header>
+        <Form horizontal onSubmit={this.submitItem}>
+          <Modal.Body>
+            <FormGroup
+              controlId="formName"
+              validationState={this.nameValidation()}>
+              <Col xs={12}>
+                <FormControl
+                  name="name"
+                  value={this.state.name}
+                  placeholder="Name"
+                  onChange={this.onNameChange}
+                  required
+                />
+                <HelpBlock>{this.state.nameError}</HelpBlock>
+              </Col>
+            </FormGroup>
+
+            <FormGroup
+              controlId="formPrice"
+              validationState={this.priceValidation()}>
+              <Col xs={12}>
+                <InputGroup>
+                  <InputGroup.Addon>$</InputGroup.Addon>
                   <FormControl
-                    name="name"
-                    value={this.state.name}
-                    placeholder="Name"
-                    onChange={this.onNameChange}
+                    componentClass="input"
+                    type="number"
+                    min="0.00"
+                    step=".01"
+                    value={this.state.price}
+                    placeholder="0.00"
+                    onChange={this.onPriceChange}
                     required
                   />
-                  <HelpBlock>{this.state.nameError}</HelpBlock>
-                </Col>
-              </FormGroup>
+                </InputGroup>
+                <HelpBlock>{this.state.priceError}</HelpBlock>
+              </Col>
+            </FormGroup>
 
-              <FormGroup
-                controlId="formPrice"
-                validationState={this.priceValidation()}>
-                <Col xs={12} sm={4}>
-                  <InputGroup>
-                    <InputGroup.Addon>$</InputGroup.Addon>
-                    <FormControl
-                      componentClass="input"
-                      type="number"
-                      min="0.00"
-                      step=".01"
-                      value={this.state.price}
-                      placeholder="0.00"
-                      onChange={this.onPriceChange}
-                      required
-                    />
-                  </InputGroup>
-                  <HelpBlock>{this.state.priceError}</HelpBlock>
-                </Col>
-              </FormGroup>
+            <FormGroup controlId="formDesc">
+              <Col xs={12}>
+                <FormControl
+                  componentClass="textarea"
+                  value={this.state.desc}
+                  placeholder="Description"
+                  onChange={this.onDescChange}
+                />
+              </Col>
+            </FormGroup>
 
-              <FormGroup controlId="formDesc">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Description
-                </Col>
-                <Col sm={10}>
-                  <FormControl
-                    componentClass="textarea"
-                    value={this.state.desc}
-                    placeholder="Description"
-                    onChange={this.onDescChange}
+            <FormGroup controlId="formImg">
+              <Col xsHidden sm={12}>
+                {this.state.image && (
+                  <Image
+                    className="image"
+                    src={URL.createObjectURL(this.state.image)}
+                    responsive
                   />
-                </Col>
-              </FormGroup>
-
-              <FormGroup controlId="formImg">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Avatar
-                </Col>
-                <Col sm={10}>
-                  {this.state.image && (
-                    <Image
-                      className="image"
-                      src={URL.createObjectURL(this.state.image)}
-                      responsive
-                    />
-                  )}
-                  <FormControl type="file" onChange={this.handleFileSelect} />
-                </Col>
-              </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button bsStyle="primary" type="submit">
-                Add
-              </Button>
-              <Button bsStyle="primary" onClick={this.props.closeAdd}>
-                Cancel
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-      </div>
+                )}
+              </Col>
+              <Col smHidden mdHidden lgHidden xs={12}>
+                {this.state.image && (
+                  <Image
+                    className="image-small"
+                    src={URL.createObjectURL(this.state.image)}
+                    responsive
+                  />
+                )}
+              </Col>
+            </FormGroup>
+          </Modal.Body>
+          <Modal.Footer>
+            <input
+              className="pull-left"
+              type="file"
+              onChange={this.handleFileSelect}
+            />
+            <Button bsStyle="primary" type="submit">
+              Add
+            </Button>
+            <Button bsStyle="primary" onClick={closeAdd}>
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     );
   }
 }

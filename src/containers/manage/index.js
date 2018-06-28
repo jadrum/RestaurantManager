@@ -41,15 +41,30 @@ class ManageMenuItems extends Component {
   };
 
   render() {
-    const { rid } = this.props; // destructure props
+    const { rid, menuItem } = this.props; // destructure props
+
     // turns '/drinks' --> 'drinks' for the page title
-    let type = this.props.menuItem.substring(1, this.props.menuItem.length);
+    let type = menuItem.substring(1, menuItem.length);
     let comp; // used to wait for rid to be available
-    if (this.props.rid) {
+
+    if (rid) {
       comp = (
         <div>
+          <AddMenuItem
+            rid={rid}
+            menuItem={menuItem}
+            showAddModal={this.state.showAddModal}
+            closeAdd={this.closeAdd}
+          />
+          <UpdateMenuItem
+            rid={rid}
+            menuItem={menuItem}
+            showUpdateModal={this.state.showUpdateModal}
+            closeUpdate={this.closeUpdate}
+            item={this.state.itemBeingUpdated}
+          />
           <Grid>
-            <Row>
+            <Row className="manage-index_rows">
               <Panel bsStyle="primary">
                 <div className="panel-heading">
                   <div className="btn-group pull-right">
@@ -62,22 +77,11 @@ class ManageMenuItems extends Component {
                   </Panel.Title>
                 </div>
               </Panel>
-              <AddMenuItem
-                rid={rid}
-                menuItem={this.props.menuItem}
-                showAddModal={this.state.showAddModal}
-                closeAdd={this.closeAdd}
-              />
-              <UpdateMenuItem
-                rid={rid}
-                menuItem={this.props.menuItem}
-                showUpdateModal={this.state.showUpdateModal}
-                closeUpdate={this.closeUpdate}
-                item={this.state.itemBeingUpdated}
-              />
+            </Row>
+            <Row>
               <ListMenuItems
                 rid={rid}
-                menuItem={this.props.menuItem}
+                menuItem={menuItem}
                 showUpdate={this.showUpdate}
               />
             </Row>

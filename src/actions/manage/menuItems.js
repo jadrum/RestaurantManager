@@ -1,3 +1,5 @@
+import generateRandomID from 'uuid/v4';
+import db from '../../firebase/firebase';
 import {
   addToDb,
   updateDb,
@@ -7,12 +9,9 @@ import {
   getFbUrl,
   fbTaskHandler
 } from '../../firebase/firebase';
-import db from '../../firebase/firebase';
-import generateRandomID from 'uuid/v4';
 
 export const FETCH_ITEMS = 'items/FETCH';
 
-const STORAGE = '/images';
 /* Gen random id for images */
 const genRandomFilename = (): string => generateRandomID();
 
@@ -22,7 +21,7 @@ const genRandomFilename = (): string => generateRandomID();
  */
 const getPath = (rid, item) => ({
   dbPath: 'restaurants/' + rid + item,
-  storagePath: rid + STORAGE
+  storagePath: rid + '/images'
 });
 
 export const addItem = (rid, item, data) => async dispatch => {
