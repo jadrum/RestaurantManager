@@ -1,7 +1,6 @@
-import { firebase } from '../../firebase/firebase';
-import { LOGIN, INITDATA, LOGOUT } from '../../reducers/auth/auth';
 import generateRandomID from 'uuid/v4';
-import { addToDb, getDb } from '../../firebase/firebase';
+import { firebase, addToDb, getDb } from '../../firebase/firebase';
+import { LOGIN, INITDATA, LOGOUT } from '../../reducers/auth/auth';
 
 /* Gen random id for images */
 const genRandomID = (): string => generateRandomID();
@@ -37,13 +36,10 @@ export const addRestaurant = data => async dispatch => {
   addToDb(USERS, user, data); // add user
 };
 
-export const login = (uid, restaurant, clearance, restaurantName) => {
-  return {
-    type: LOGIN,
-    uid
-  };
-};
-
+/**
+ * Dispatches an action to upload data about the user
+ * to the redux store.
+ */
 export const initData = (clearance, restaurant, restaurantName) => {
   return {
     type: INITDATA,
@@ -53,6 +49,14 @@ export const initData = (clearance, restaurant, restaurantName) => {
   };
 };
 
+/**
+ * redux thunk action for retrieving data about the user
+ * who just logged in. It retrieves the information for the
+ * user using 'uid'. This includes info such as their
+ * clearance, and assigned restaurant. Then this function
+ * passes the appropriate info to 'initData' action creator
+ * above
+ */
 export const initDataAsync = uid => {
   return dispatch => {
     getDb('users', uid) // getting user info
@@ -74,12 +78,25 @@ export const initDataAsync = uid => {
 };
 
 /**
+ * Login action creator.
+ */
+export const login = (uid, restaurant, clearance, restaurantName) => {
+  return {
+    type: LOGIN,
+    uid
+  };
+};
+
+/**
  * TODO: ADD ERROR HANDLING, RETURN AN ERROR
  */
 export const startLogin = data => async dispatch => {
   return firebase.auth().signInWithEmailAndPassword(data.email, data.password);
 };
 
+/**
+ * Log out action creator.
+ */
 export const logout = uid => ({
   type: LOGOUT
 });

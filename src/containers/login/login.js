@@ -7,7 +7,7 @@ import {
   FormControl,
   FormGroup,
   HelpBlock,
-  Modal
+  Row
 } from 'react-bootstrap';
 import { startLogin } from '../../actions/auth/auth';
 
@@ -67,67 +67,66 @@ class Login extends Component {
   };
 
   render() {
-    const { showLoginModal } = this.props;
-
     return (
-      <div>
-        <Modal show={showLoginModal} onHide={this.props.closeLogin}>
-          <Modal.Header closeButton>
-            <Modal.Title>Login</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="Login">
-              <form onSubmit={this.handleSubmit}>
-                <FormGroup
-                  controlId="email"
-                  validationState={this.emailValidation()}
-                  bsSize="large">
-                  <FormControl
-                    autoFocus
-                    type="email"
-                    value={this.state.email}
-                    onChange={this.handleChange}
-                    placeholder="email"
-                    required
-                  />
-                  <HelpBlock>
-                    <Col sm={2} />
-                    <Col sm={10}>{this.state.emailError}</Col>
-                  </HelpBlock>
-                </FormGroup>
+      <Row className="login-form">
+        <form onSubmit={this.handleSubmit}>
+          <Col className="less-padding" xs={12} sm={5}>
+            <FormGroup
+              controlId="email"
+              validationState={this.emailValidation()}
+              bsSize="small">
+              <FormControl
+                autoFocus
+                type="email"
+                value={this.state.email}
+                onChange={this.handleChange}
+                placeholder="email"
+                required
+              />
 
-                <FormGroup
-                  controlId="password"
-                  validationState={this.passwordValidation()}
-                  bsSize="large">
-                  <FormControl
-                    type="password"
-                    value={this.state.password}
-                    onChange={this.handleChange}
-                    placeholder="password"
-                    required
-                  />
-                  <HelpBlock>
-                    <Col sm={2} />
-                    <Col sm={10}>{this.state.passwordError}</Col>
-                  </HelpBlock>
-                </FormGroup>
+              <HelpBlock>
+                <Col sm={2} />
+                <Col sm={10}>{this.state.emailError}</Col>
+              </HelpBlock>
+            </FormGroup>
+          </Col>
 
-                <Button
-                  block
-                  bsStyle="primary"
-                  bsSize="large"
-                  disabled={!this.validateForm()}
-                  type="submit">
-                  Login
-                </Button>
-              </form>
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+          <Col className="less-padding" xs={12} sm={5}>
+            <FormGroup
+              controlId="password"
+              validationState={this.passwordValidation()}
+              bsSize="small">
+              <FormControl
+                type="password"
+                value={this.state.password}
+                onChange={this.handleChange}
+                placeholder="password"
+                required
+              />
+              <HelpBlock>
+                <Col sm={2} />
+                <Col sm={10}>{this.state.passwordError}</Col>
+              </HelpBlock>
+            </FormGroup>
+          </Col>
+
+          <Col className="less-padding" xs={12} sm={2}>
+            <Button
+              block
+              bsStyle="primary"
+              bsSize="small"
+              disabled={!this.validateForm()}
+              type="submit">
+              Log In
+            </Button>
+          </Col>
+        </form>
+      </Row>
     );
   }
 }
 
-export default connect(null, { startLogin })(Login);
+export default connect(
+  null,
+  { startLogin }
+)(Login);

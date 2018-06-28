@@ -1,49 +1,41 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { removeDessert, fetchDesserts } from '../../../actions/manage/desserts';
-import {
-  Button,
-  Col,
-  Glyphicon,
-  Grid,
-  Panel,
-  Row,
-  Thumbnail
-} from 'react-bootstrap';
+import { removeItem, fetchItems } from '../../actions/manage/menuItems';
+import { Button, Col, Glyphicon, Panel, Row, Thumbnail } from 'react-bootstrap';
 
-class ListDesserts extends Component {
+class ListMenuItems extends Component {
   componentWillMount() {
-    this.props.fetchDesserts(); // effectively sets up state by listening to firebase
+    this.props.fetchItems(this.props.rid, this.props.menuItem); // effectively sets up state by listening to firebase
   }
 
-  renderDesserts = (dessert, i) => {
+  renderItems = (item, i) => {
+    const { removeItem, rid, menuItem, showUpdate } = this.props;
+
     return (
-      <Col xs={12} md={6} lg={4} className="comment" key={i}>
-        <Thumbnail src={dessert.imageUrl} alt="242x200">
+      <Col xs={12} sm={6} lg={4} key={i}>
+        <Thumbnail src={item.imageUrl} alt="242x200">
           <Panel bsStyle="primary">
             <div className="panel-heading">
               <div className="btn-group pull-left">
                 <Button
                   bsSize="xsmall"
-                  onClick={() => this.props.removeDessert(dessert)}>
+                  onClick={() => removeItem(rid, menuItem, item)}>
                   <Glyphicon glyph="trash" />
                 </Button>
               </div>
               <div className="btn-group pull-right">
-                <Button
-                  bsSize="xsmall"
-                  onClick={() => this.props.showUpdate(dessert)}>
+                <Button bsSize="xsmall" onClick={() => showUpdate(item)}>
                   <Glyphicon glyph="pencil" />
                 </Button>
               </div>
               <Panel.Title toggle className="text-center" componentClass="h4">
-                {dessert.name}
+                {item.name}
               </Panel.Title>
             </div>
             <Panel.Collapse>
               <Panel.Body>
-                {dessert.desc} - {dessert.price}
+                {item.desc} - {item.price}
               </Panel.Body>
             </Panel.Collapse>
           </Panel>
@@ -53,14 +45,14 @@ class ListDesserts extends Component {
   };
 
   render() {
+    const { items, rid } = this.props;
+
     let comp;
-    if (this.props.desserts) {
+    if (items && rid) {
       comp = (
-        <Grid>
-          <Row>
-            {Object.values(this.props.desserts).map(this.renderDesserts)}
-          </Row>
-        </Grid>
+        <Col xs={12}>
+          <Row>{Object.values(items).map(this.renderItems)}</Row>
+        </Col>
       );
     } else {
       comp = null;
@@ -71,9 +63,10 @@ class ListDesserts extends Component {
 }
 
 const mapStateToProps = state => ({
-  desserts: state.desserts.desserts
+  items: state.menuItems.items
 });
 
-export default connect(mapStateToProps, { removeDessert, fetchDesserts })(
-  ListDesserts
-);
+export default connect(
+  mapStateToProps,
+  { removeItem, fetchItems }
+)(ListMenuItems);
