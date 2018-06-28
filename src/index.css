@@ -58,28 +58,65 @@ button:disabled {
 /**
   *   LOGIN CLASSES
   */
+.login-index__grid__color {
+  background-color: #245580;
+}
 .login-index__right {
   height: 100%;
 }
-
-.login-index__right__options {
-  position: fixed;
-  width: 50%;
-  max-width: 550px;
-  top: 50%;
-  left: 75%;
-  transform: translate(-50%, -50%);
+.login-index__right__mobile {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 20px;
 }
 
-.login-index__right__options div {
-  padding-top: 2.5vh;
+.login-index__right__options {
+  min-height: 100%; /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
   font-weight: 550;
   font-size: 27px;
   line-height: 32px;
 }
 
+.login-index__right__options__mobile {
+  min-height: 60%; /* Fallback for browsers do NOT support vh unit */
+  min-height: 60vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+  font-weight: 550;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.login-index__right__options div,
+.login-index__right__options__mobile div {
+  padding-top: 2.5vh;
+}
+
 .login-index__left {
   height: 100%;
+  background-color: #245580;
+  overflow: hidden;
+}
+
+.login-index__left__mobile {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 20px;
   background-color: #245580;
 }
 
@@ -95,14 +132,30 @@ button:disabled {
   font-size: 1.25rem;
 }
 
-.login-index__left__info div {
+.login-index__left__info__mobile {
+  min-height: 40%; /* Fallback for browsers do NOT support vh unit */
+  min-height: 40vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+
+  color: rgb(255, 255, 255);
+  font-weight: 550;
+  font-size: 15px;
+}
+
+.login-index__left__info div,
+.login-index__left__info__mobile div {
   padding-top: 2vh;
 }
 
 /** HAVEN'T FIXED STUFF BELOW HERE **/
 
 .login-form {
-  padding: 2.5vh 50px 0 50px;
+  left: 7px;
+  position: absolute;
+  top: 20px;
+  width: 100%;
 }
 
 .less-padding {

@@ -30,7 +30,7 @@ class Home extends Component {
     return (
       <Grid fluid>
         <Row>
-          <Col className="pull-right login-index__right" xs={12} sm={6}>
+          <Col className="pull-right login-index__right" xsHidden sm={6}>
             <Login />
             <Register
               showRegisterModal={this.state.showRegisterModal}
@@ -53,8 +53,70 @@ class Home extends Component {
             </Row>
           </Col>
 
-          <Col className="login-index__left" xs={12} sm={6}>
+          <Col className="login-index__left" xsHidden sm={6}>
             <Row className="login-index__left__info">
+              <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="pencil" />
+                  </Col>
+                  <Col xs={10}>Manage restaurant menu</Col>
+                </Row>
+
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="shopping-cart" />
+                  </Col>
+                  <Col xs={10}>Open and close customer tabs</Col>
+                </Row>
+
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="stats" />
+                  </Col>
+                  <Col xs={10}>Track your staff performance</Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col
+            className="pull-right login-index__right__mobile"
+            smHidden
+            mdHidden
+            lgHidden
+            xs={12}>
+            <Login />
+            <Register
+              showRegisterModal={this.state.showRegisterModal}
+              closeRegister={this.closeRegister}
+            />
+            <Row className="login-index__right__options__mobile">
+              <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
+                <Row>Start managing your restaurant with ease today!</Row>
+                <Row>
+                  <Button block bsStyle="primary" onClick={this.showRegister}>
+                    Register your restaurant
+                  </Button>
+                </Row>
+                <Row>
+                  <Button block bsStyle="primary">
+                    Continue as a guest
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col
+            className="login-index__left__mobile"
+            smHidden
+            mdHidden
+            lgHidden
+            xs={12}>
+            <Row className="login-index__left__info__mobile">
               <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
                 <Row>
                   <Col xs={2}>
