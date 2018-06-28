@@ -1,9 +1,10 @@
 import React from 'react';
 import { Component } from 'react';
 //import { push } from 'react-router-redux'
-import { Button } from 'react-bootstrap';
+import { Button, Col, Glyphicon, Grid, Row } from 'react-bootstrap';
 import Login from './login';
 import Register from './register';
+import 'normalize.css/normalize.css';
 
 class Home extends Component {
   constructor(props, context) {
@@ -15,51 +16,133 @@ class Home extends Component {
     };
   }
 
-  /** Function used by AddDrink component **/
-  showLogin = () => {
-    this.setState({ showLoginModal: true });
-  };
-
-  /** Function used by AddDrink component **/
-  closeLogin = () => {
-    this.setState({ showLoginModal: false });
-  };
-
-  /** Function used by AddDrink component **/
+  /** Function used by register component **/
   showRegister = () => {
     this.setState({ showRegisterModal: true });
   };
 
-  /** Function used by AddDrink component **/
+  /** Function used by register component **/
   closeRegister = () => {
     this.setState({ showRegisterModal: false });
   };
 
   render() {
-    const { startLogin } = this.props;
-
     return (
-      <div>
-        <h1>Login</h1>
-        <div>
-          <Button onClick={this.showLogin}>Login</Button>
-        </div>
-        <div>
-          <Button onClick={this.showRegister}>Register restaurant</Button>
-        </div>
-        <div>
-          <Button>Continue as guest</Button>
-        </div>
-        <Login
-          showLoginModal={this.state.showLoginModal}
-          closeLogin={this.closeLogin}
-          startLogin={startLogin}
-        />
-        <Register
-          showRegisterModal={this.state.showRegisterModal}
-          closeRegister={this.closeRegister}
-        />
-      </div>
+      <Grid fluid>
+        <Row>
+          <Col className="pull-right login-index__right" xsHidden sm={6}>
+            <Login />
+            <Register
+              showRegisterModal={this.state.showRegisterModal}
+              closeRegister={this.closeRegister}
+            />
+            <Row className="login-index__right__options">
+              <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
+                <Row>Start managing your restaurant with ease today!</Row>
+                <Row>
+                  <Button block bsStyle="primary" onClick={this.showRegister}>
+                    Register your restaurant
+                  </Button>
+                </Row>
+                <Row>
+                  <Button block bsStyle="primary">
+                    Continue as a guest
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col className="login-index__left" xsHidden sm={6}>
+            <Row className="login-index__left__info">
+              <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="pencil" />
+                  </Col>
+                  <Col xs={10}>Manage restaurant menu</Col>
+                </Row>
+
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="shopping-cart" />
+                  </Col>
+                  <Col xs={10}>Open and close customer tabs</Col>
+                </Row>
+
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="stats" />
+                  </Col>
+                  <Col xs={10}>Track your staff performance</Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col
+            className="pull-right login-index__right__mobile"
+            smHidden
+            mdHidden
+            lgHidden
+            xs={12}>
+            <Login />
+            <Register
+              showRegisterModal={this.state.showRegisterModal}
+              closeRegister={this.closeRegister}
+            />
+            <Row className="login-index__right__options__mobile">
+              <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
+                <Row>Start managing your restaurant with ease today!</Row>
+                <Row>
+                  <Button block bsStyle="primary" onClick={this.showRegister}>
+                    Register your restaurant
+                  </Button>
+                </Row>
+                <Row>
+                  <Button block bsStyle="primary">
+                    Continue as a guest
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col
+            className="login-index__left__mobile"
+            smHidden
+            mdHidden
+            lgHidden
+            xs={12}>
+            <Row className="login-index__left__info__mobile">
+              <Col xs={10} xsOffset={1} md={8} mdOffset={2}>
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="pencil" />
+                  </Col>
+                  <Col xs={10}>Manage restaurant menu</Col>
+                </Row>
+
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="shopping-cart" />
+                  </Col>
+                  <Col xs={10}>Open and close customer tabs</Col>
+                </Row>
+
+                <Row>
+                  <Col xs={2}>
+                    <Glyphicon glyph="stats" />
+                  </Col>
+                  <Col xs={10}>Track your staff performance</Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

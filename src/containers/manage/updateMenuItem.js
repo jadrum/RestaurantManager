@@ -1,11 +1,10 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateAppetizer } from '../../../actions/manage/appetizers';
+import { updateItem } from '../../actions/manage/menuItems';
 import {
   Button,
   Col,
-  ControlLabel,
   Form,
   FormControl,
   FormGroup,
@@ -15,7 +14,7 @@ import {
   Modal
 } from 'react-bootstrap';
 
-class UpdateAppetizer extends Component {
+class UpdateMenuItem extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -34,7 +33,7 @@ class UpdateAppetizer extends Component {
     };
   }
 
-  submitAppetizer = e => {
+  submitItem = e => {
     e.preventDefault();
     /* Check for errors before submitting */
     if (
@@ -43,9 +42,11 @@ class UpdateAppetizer extends Component {
     ) {
       return;
     }
-    this.props.updateAppetizer({
-      oldName: this.props.appetizer.name,
-      newAppetizer: {
+    this.props.updateItem({
+      rid: this.props.rid,
+      item: this.props.menuItem,
+      oldName: this.props.item.name,
+      newItem: {
         name: this.state.name,
         price: this.state.price,
         desc: this.state.desc,
@@ -62,9 +63,9 @@ class UpdateAppetizer extends Component {
   };
 
   onNameChange = e => {
-    let old = this.props.appetizer.name; // the old appetizer name
-    let n = e.target.value; // the new appetizer name
-    if (old !== n && this.props.appetizers[n]) {
+    let old = this.props.item.name; // the old item name
+    let n = e.target.value; // the new item name
+    if (old !== n && this.props.items[n]) {
       this.setState({ nameMsg: 'Name already in use.' });
       this.setState({ nameValid: false });
     } else if (n === '') {
@@ -94,12 +95,12 @@ class UpdateAppetizer extends Component {
   };
 
   handleEnter = () => {
-    this.setState({ name: this.props.appetizer.name });
-    this.setState({ price: this.props.appetizer.price });
-    this.setState({ desc: this.props.appetizer.desc });
-    this.setState({ imageUrl: this.props.appetizer.imageUrl });
-    if (this.props.appetizer.imageRef !== undefined) {
-      this.setState({ imageRef: this.props.appetizer.imageRef });
+    this.setState({ name: this.props.item.name });
+    this.setState({ price: this.props.item.price });
+    this.setState({ desc: this.props.item.desc });
+    this.setState({ imageUrl: this.props.item.imageUrl });
+    if (this.props.item.imageRef !== undefined) {
+      this.setState({ imageRef: this.props.item.imageRef });
     }
   };
 
@@ -132,6 +133,8 @@ class UpdateAppetizer extends Component {
   };
 
   render() {
+    // turns '/drinks' --> 'drinks' for the page title
+    let type = this.props.menuItem.substring(1, this.props.menuItem.length - 1);
     return (
       <div>
         <Modal
@@ -139,39 +142,29 @@ class UpdateAppetizer extends Component {
           onHide={this.handleClose}
           onEnter={this.handleEnter}>
           <Modal.Header closeButton>
-            <Modal.Title>Update appetizer</Modal.Title>
+            <Modal.Title>Update {type}</Modal.Title>
           </Modal.Header>
-          <Form horizontal onSubmit={this.submitAppetizer}>
+          <Form horizontal onSubmit={this.submitItem}>
             <Modal.Body>
               <FormGroup
                 controlId="formName"
                 validationState={this.nameValidation()}>
-                <Col componentClass={ControlLabel} sm={2}>
-                  Name
-                </Col>
-                <Col sm={10}>
+                <Col xs={12}>
                   <FormControl
-                    componentClass="input"
                     name="name"
                     value={this.state.name}
                     placeholder="Name"
                     onChange={this.onNameChange}
                     required
                   />
+                  <HelpBlock>{this.state.nameError}</HelpBlock>
                 </Col>
-                <HelpBlock>
-                  <Col sm={2} />
-                  <Col sm={10}>{this.state.nameMsg}</Col>
-                </HelpBlock>
               </FormGroup>
 
               <FormGroup
                 controlId="formPrice"
                 validationState={this.priceValidation()}>
-                <Col componentClass={ControlLabel} sm={2}>
-                  Price
-                </Col>
-                <Col sm={10}>
+                <Col xs={12}>
                   <InputGroup>
                     <InputGroup.Addon>$</InputGroup.Addon>
                     <FormControl
@@ -185,18 +178,12 @@ class UpdateAppetizer extends Component {
                       required
                     />
                   </InputGroup>
+                  <HelpBlock>{this.state.priceMsg}</HelpBlock>
                 </Col>
-                <HelpBlock>
-                  <Col sm={2} />
-                  <Col sm={10}>{this.state.priceMsg}</Col>
-                </HelpBlock>
               </FormGroup>
 
               <FormGroup controlId="formDesc">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Description
-                </Col>
-                <Col sm={10}>
+                <Col xs={12}>
                   <FormControl
                     componentClass="textarea"
                     value={this.state.desc}
@@ -207,24 +194,47 @@ class UpdateAppetizer extends Component {
               </FormGroup>
 
               <FormGroup controlId="formImg">
-                <Col componentClass={ControlLabel} sm={2}>
-                  Avatar
-                </Col>
-                <Col sm={10}>
+                <Col xsHidden sm={12}>
                   {!this.state.newImage && (
-                    <Image src={this.state.imageUrl} responsive />
+                    <Image
+                      className="image"
+                      src={this.state.imageUrl}
+                      responsive
+                    />
                   )}
                   {this.state.newImage && (
                     <Image
+                      className="image"
                       src={URL.createObjectURL(this.state.image)}
                       responsive
                     />
                   )}
-                  <FormControl type="file" onChange={this.handleFileSelect} />
+                </Col>
+
+                <Col smHidden mdHidden lgHidden sm={12}>
+                  {!this.state.newImage && (
+                    <Image
+                      className="image-small"
+                      src={this.state.imageUrl}
+                      responsive
+                    />
+                  )}
+                  {this.state.newImage && (
+                    <Image
+                      className="image-small"
+                      src={URL.createObjectURL(this.state.image)}
+                      responsive
+                    />
+                  )}
                 </Col>
               </FormGroup>
             </Modal.Body>
             <Modal.Footer>
+              <input
+                className="pull-left"
+                type="file"
+                onChange={this.handleFileSelect}
+              />
               <Button bsStyle="primary" type="submit">
                 Save
               </Button>
@@ -240,7 +250,10 @@ class UpdateAppetizer extends Component {
 }
 
 const mapStateToProps = state => ({
-  appetizers: state.appetizers.appetizers
+  items: state.menuItems.items
 });
 
-export default connect(mapStateToProps, { updateAppetizer })(UpdateAppetizer);
+export default connect(
+  mapStateToProps,
+  { updateItem }
+)(UpdateMenuItem);

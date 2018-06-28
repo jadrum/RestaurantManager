@@ -16,6 +16,7 @@ import { startLogout } from '../../actions/auth/auth';
  * otherwise it redirects to the home screen.
  */
 export const PrivateRoute = ({
+  menuItem,
   isAuthenticated,
   startLogout,
   component: Component,
@@ -29,7 +30,7 @@ export const PrivateRoute = ({
         isAuthenticated ? (
           <div>
             <Header startLogout={startLogout} />
-            <Component {...props} />
+            <Component menuItem={menuItem} {...props} />
           </div>
         ) : (
           <Redirect to="/" />
@@ -47,5 +48,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators({ startLogout }, dispatch);
 
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(PrivateRoute)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PrivateRoute)
 );

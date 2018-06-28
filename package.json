@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "firebase": "^5.0.4",
+    "normalize.css": "7.0.0",
     "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.2",
@@ -34,6 +35,9 @@
   },
   "homepage": "https://cra-redux-router-thunk.herokuapp.com",
   "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

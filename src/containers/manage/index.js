@@ -3,51 +3,68 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Glyphicon, Grid, Panel, Row } from 'react-bootstrap';
 //import { push } from 'react-router-redux';
-import AddDrink from './addDrink';
-import ListDrinks from './listDrinks';
-import UpdateDrink from './updateDrink';
+import AddMenuItem from './addMenuItem';
+import ListMenuItems from './listMenuItems';
+import UpdateMenuItem from './updateMenuItem';
 
-class ManageDrinks extends Component {
+class ManageMenuItems extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       showAddModal: false,
       showUpdateModal: false,
-      drinkBeingUpdated: null
+      itemBeingUpdated: null
     };
   }
 
-  /** Function used by AddDrink component **/
+  /** Function used by AddMenuItem component **/
   showAdd = () => {
     this.setState({ showAddModal: true });
   };
 
-  /** Function used by AddDrink component **/
+  /** Function used by AddMenuItem component **/
   closeAdd = () => {
     this.setState({ showAddModal: false });
   };
 
-  /** Function used by AddDrink component **/
-  showUpdate = drink => {
-    this.setState({ drinkBeingUpdated: drink });
+  /** Function used by AddMenuItem component **/
+  showUpdate = item => {
+    this.setState({ itemBeingUpdated: item });
     this.setState({ showUpdateModal: true });
   };
 
-  /** Function used by AddDrink component **/
+  /** Function used by AddMenuItem component **/
   closeUpdate = () => {
-    this.setState({ drinkBeingUpdated: null });
+    this.setState({ itemBeingUpdated: null });
     this.setState({ showUpdateModal: false });
   };
 
   render() {
-    const { rid } = this.props; // destructure props
+    const { rid, menuItem } = this.props; // destructure props
+
+    // turns '/drinks' --> 'drinks' for the page title
+    let type = menuItem.substring(1, menuItem.length);
     let comp; // used to wait for rid to be available
-    if (this.props.rid) {
+
+    if (rid) {
       comp = (
         <div>
+          <AddMenuItem
+            rid={rid}
+            menuItem={menuItem}
+            showAddModal={this.state.showAddModal}
+            closeAdd={this.closeAdd}
+          />
+          <UpdateMenuItem
+            rid={rid}
+            menuItem={menuItem}
+            showUpdateModal={this.state.showUpdateModal}
+            closeUpdate={this.closeUpdate}
+            item={this.state.itemBeingUpdated}
+          />
           <Grid>
-            <Row>
+            <Row className="manage-index_rows">
               <Panel bsStyle="primary">
                 <div className="panel-heading">
                   <div className="btn-group pull-right">
@@ -56,22 +73,17 @@ class ManageDrinks extends Component {
                     </Button>
                   </div>
                   <Panel.Title className="text-center" componentClass="h4">
-                    Manage Drinks
+                    Manage {type}
                   </Panel.Title>
                 </div>
               </Panel>
-              <AddDrink
+            </Row>
+            <Row>
+              <ListMenuItems
                 rid={rid}
-                showAddModal={this.state.showAddModal}
-                closeAdd={this.closeAdd}
+                menuItem={menuItem}
+                showUpdate={this.showUpdate}
               />
-              <UpdateDrink
-                rid={rid}
-                showUpdateModal={this.state.showUpdateModal}
-                closeUpdate={this.closeUpdate}
-                drink={this.state.drinkBeingUpdated}
-              />
-              <ListDrinks rid={rid} showUpdate={this.showUpdate} />
             </Row>
           </Grid>
         </div>
@@ -88,4 +100,4 @@ const mapStateToProps = state => ({
   rid: state.auth.rid
 });
 
-export default connect(mapStateToProps)(ManageDrinks);
+export default connect(mapStateToProps)(ManageMenuItems);
