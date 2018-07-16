@@ -23,6 +23,12 @@ const Header = props => (
             Desserts
           </MenuItem>
         </NavDropdown>
+
+        <NavDropdown eventKey={1} title="Admin" id="basic-nav-dropdown">
+          <MenuItem eventKey={1.1} href="manage-employees">
+            Manage employees
+          </MenuItem>
+        </NavDropdown>
       </Nav>
       <Nav pullRight>
         <NavItem eventKey={1} href="about-us">

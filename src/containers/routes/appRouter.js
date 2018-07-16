@@ -7,6 +7,7 @@ import Home from '../login';
 import Dashboard from '../dashboard';
 import About from '../about';
 import ManageMenuItems from '../manage';
+import ManageEmployees from '../admin';
 
 const AppRouter = () => (
   <Router history={history}>
@@ -31,6 +32,11 @@ const AppRouter = () => (
         path="/manage-desserts"
         menuItem="/desserts"
         component={ManageMenuItems}
+      />
+      <PrivateRoute
+        exact
+        path="/manage-employees"
+        component={ManageEmployees}
       />
     </Switch>
   </Router>
