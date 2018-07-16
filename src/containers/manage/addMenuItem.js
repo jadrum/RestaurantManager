@@ -40,7 +40,7 @@ class AddMenuItem extends Component {
       return;
     }
     this.props.addItem(this.props.rid, this.props.menuItem, {
-      name: this.state.name,
+      name: this.state.name.trim(),
       price: this.state.price,
       desc: this.state.desc,
       image: this.state.image,

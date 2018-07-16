@@ -47,7 +47,7 @@ class UpdateMenuItem extends Component {
       item: this.props.menuItem,
       oldName: this.props.item.name,
       newItem: {
-        name: this.state.name,
+        name: this.state.name.trim(),
         price: this.state.price,
         desc: this.state.desc,
         image: this.state.image,
