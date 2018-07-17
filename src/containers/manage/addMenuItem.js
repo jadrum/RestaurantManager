@@ -41,7 +41,7 @@ class AddMenuItem extends Component {
     }
     this.props.addItem(this.props.rid, this.props.menuItem, {
       name: this.state.name.trim(),
-      price: this.state.price,
+      price: parseFloat(this.state.price),
       desc: this.state.desc,
       image: this.state.image,
       imageUrl: '/img' + this.props.menuItem + '/default.jpg',
@@ -207,7 +207,4 @@ const mapStateToProps = state => ({
   rid: state.auth.rid
 });
 
-export default connect(
-  mapStateToProps,
-  { addItem }
-)(AddMenuItem);
+export default connect(mapStateToProps, { addItem })(AddMenuItem);

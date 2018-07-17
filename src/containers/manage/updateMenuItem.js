@@ -48,7 +48,7 @@ class UpdateMenuItem extends Component {
       oldName: this.props.item.name,
       newItem: {
         name: this.state.name.trim(),
-        price: this.state.price,
+        price: parseFloat(this.state.price),
         desc: this.state.desc,
         image: this.state.image,
         imageUrl: this.state.imageUrl,
@@ -253,7 +253,4 @@ const mapStateToProps = state => ({
   items: state.menuItems.items
 });
 
-export default connect(
-  mapStateToProps,
-  { updateItem }
-)(UpdateMenuItem);
+export default connect(mapStateToProps, { updateItem })(UpdateMenuItem);
