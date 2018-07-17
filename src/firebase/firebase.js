@@ -46,6 +46,19 @@ const addToDb = (path, name, data) => {
     .child(name)
     .set(data); // still upload the drink
 };
+// const data = {
+//   name: "fuck me, FUCK ME",
+//   price: 69.69,
+//   desc: "POOP ON MY CHEST REAL QUICK MOMA BOO",
+//   image: null,
+//   imageUrl: "/img/drinks/default.jpg"
+// }
+// console.log('test on type', data.price);
+//
+// db
+//   .ref('dylansplayground')
+//   .child('integerTest')
+//   .set(data);
 
 const updateDb = (path, name, data) => {
   db.ref(path + '/' + name).update(data);

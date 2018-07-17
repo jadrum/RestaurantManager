@@ -26,6 +26,7 @@ const getPath = (rid, item) => ({
 
 export const addItem = (rid, item, data) => async dispatch => {
   let { dbPath, storagePath } = getPath(rid, item); // get path names
+
   if (data.image) {
     // if there's an image to upload
     let imageName = genRandomFilename(); // get img name
@@ -48,6 +49,8 @@ export const removeItem = (rid, item, data) => async dispatch => {
   removeDb(dbPath, data.name);
 };
 
+//need to go ahead and take care if they want to change the name I have
+//to trim it again to stop the problem
 export const updateItem = data => async dispatch => {
   let { dbPath, storagePath } = getPath(data.rid, data.item); // get path names
   let imageName;
