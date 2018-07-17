@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchEmployees } from '../../actions/admin/employees';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Grid, Row, Table } from 'react-bootstrap';
 
 class ListEmployees extends Component {
   componentWillMount() {
@@ -10,10 +10,15 @@ class ListEmployees extends Component {
   }
 
   renderItems = (employee, i) => {
+    console.log(employee);
     return (
-      <Col xs={12} sm={6} lg={4} key={i}>
-        {employee}
-      </Col>
+      <tr key={i}>
+        <td>{i + 1}</td>
+        <td>{employee.firstName}</td>
+        <td>{employee.lastName}</td>
+        <td>{employee.email}</td>
+        <td>{employee.clearance}</td>
+      </tr>
     );
   };
 
@@ -23,9 +28,26 @@ class ListEmployees extends Component {
     let comp;
     if (employees && rid) {
       comp = (
-        <Col xs={12}>
-          <Row>{Object.values(employees).map(this.renderItems)}</Row>
-        </Col>
+        <Grid fluid>
+          <Row>
+            <Col xs={1} />
+            <Col xs={10}>
+              <Table striped responsive hover condensed>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>{Object.values(employees).map(this.renderItems)}</tbody>
+              </Table>
+            </Col>
+            <Col xs={1} />
+          </Row>
+        </Grid>
       );
     } else {
       comp = null;
