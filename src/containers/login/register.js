@@ -16,9 +16,15 @@ class Register extends Component {
     super(props, context);
 
     this.state = {
-      name: '',
-      nameError: '',
-      nameValid: true,
+      firstName: '',
+      firstnameError: '',
+      firstNameValid: true,
+      lastName: '',
+      lastnameError: '',
+      lastNameValid: true,
+      restaurantName: '',
+      restaurantNameError: '',
+      restaurantNameValid: true,
       email: '',
       emailError: '',
       emailValid: true,
@@ -38,8 +44,11 @@ class Register extends Component {
       .then(
         user => {
           this.props.addRestaurant({
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            email: this.state.email,
             user: user.user.uid,
-            restaurant: this.state.name
+            restaurant: this.state.restaurantName
           });
         },
         error => {
@@ -60,7 +69,7 @@ class Register extends Component {
   };
 
   nameValidation = () => {
-    if (this.state.nameValid === false) {
+    if (this.state.restaurantNameValid === false) {
       return 'error';
     }
   };
@@ -73,6 +82,18 @@ class Register extends Component {
 
   passwordValidation = () => {
     if (this.state.passwordValid === false) {
+      return 'error';
+    }
+  };
+
+  firstNameValidation = () => {
+    if (this.state.firstNameValid === false) {
+      return 'error';
+    }
+  };
+
+  lastNameValidation = () => {
+    if (this.state.lastNameValid === false) {
       return 'error';
     }
   };
@@ -90,20 +111,56 @@ class Register extends Component {
             <div className="Login">
               <form onSubmit={this.handleSubmit}>
                 <FormGroup
-                  controlId="name"
+                  controlId="firstName"
+                  validationState={this.firstNameValidation()}
+                  bsSize="large">
+                  <FormControl
+                    autoFocus
+                    type="text"
+                    value={this.state.firstName}
+                    onChange={this.handleChange}
+                    placeholder="first name"
+                    required
+                  />
+                  <HelpBlock>
+                    <Col sm={2} />
+                    <Col sm={10}>{this.state.firstNameError}</Col>
+                  </HelpBlock>
+                </FormGroup>
+
+                <FormGroup
+                  controlId="lastName"
+                  validationState={this.lastNameValidation()}
+                  bsSize="large">
+                  <FormControl
+                    autoFocus
+                    type="text"
+                    value={this.state.lastName}
+                    onChange={this.handleChange}
+                    placeholder="last name"
+                    required
+                  />
+                  <HelpBlock>
+                    <Col sm={2} />
+                    <Col sm={10}>{this.state.lastNameError}</Col>
+                  </HelpBlock>
+                </FormGroup>
+
+                <FormGroup
+                  controlId="restaurantName"
                   validationState={this.nameValidation()}
                   bsSize="large">
                   <FormControl
                     autoFocus
                     type="text"
-                    value={this.state.name}
+                    value={this.state.restaurantName}
                     onChange={this.handleChange}
                     placeholder="restaurant name"
                     required
                   />
                   <HelpBlock>
                     <Col sm={2} />
-                    <Col sm={10}>{this.state.nameError}</Col>
+                    <Col sm={10}>{this.state.restaurantNameError}</Col>
                   </HelpBlock>
                 </FormGroup>
 
@@ -158,10 +215,7 @@ class Register extends Component {
   }
 }
 
-export default connect(
-  null,
-  {
-    startRegisterUser,
-    addRestaurant
-  }
-)(Register);
+export default connect(null, {
+  startRegisterUser,
+  addRestaurant
+})(Register);
