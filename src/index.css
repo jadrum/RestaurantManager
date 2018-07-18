@@ -170,6 +170,14 @@ button:disabled {
   margin-left: 0px;
 }
 
+/**
+  * Admin classes
+  */
+.admin-index_rows {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
 /*
 .full-page {
   background: #0073e6;

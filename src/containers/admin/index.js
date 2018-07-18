@@ -1,14 +1,27 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button, Glyphicon, Grid, Panel, Row } from 'react-bootstrap';
 import ListEmployees from './listEmployees';
 
 class ManageEmployees extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {};
+    this.state = {
+      showAddModal: false
+    };
   }
+
+  /** Function used by AddMenuItem component **/
+  showAdd = () => {
+    this.setState({ showAddModal: true });
+  };
+
+  /** Function used by AddMenuItem component **/
+  closeAdd = () => {
+    this.setState({ showAddModal: false });
+  };
 
   render() {
     const { rid } = this.props; // destructure props
@@ -17,8 +30,25 @@ class ManageEmployees extends Component {
     if (rid) {
       comp = (
         <div>
-          hi
-          <ListEmployees rid={rid} />
+          <Grid>
+            <Row className="admin-index_rows">
+              <Panel bsStyle="primary">
+                <div className="panel-heading">
+                  <div className="btn-group pull-right">
+                    <Button bsSize="xsmall" onClick={this.showAdd}>
+                      <Glyphicon glyph="plus" />
+                    </Button>
+                  </div>
+                  <Panel.Title className="text-center" componentClass="h4">
+                    Manage employees
+                  </Panel.Title>
+                </div>
+              </Panel>
+            </Row>
+            <Row>
+              <ListEmployees rid={rid} />
+            </Row>
+          </Grid>
         </div>
       );
     } else {

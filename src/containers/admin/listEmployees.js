@@ -30,9 +30,8 @@ class ListEmployees extends Component {
       comp = (
         <Grid fluid>
           <Row>
-            <Col xs={1} />
-            <Col xs={10}>
-              <Table striped responsive hover condensed>
+            <Col xs={12}>
+              <Table bordered striped responsive hover condensed>
                 <thead>
                   <tr>
                     <th>#</th>
@@ -45,7 +44,6 @@ class ListEmployees extends Component {
                 <tbody>{Object.values(employees).map(this.renderItems)}</tbody>
               </Table>
             </Col>
-            <Col xs={1} />
           </Row>
         </Grid>
       );
