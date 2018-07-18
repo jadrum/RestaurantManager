@@ -52,8 +52,16 @@ class Register extends Component {
           });
         },
         error => {
+          //TODO need to handle specific errors and display accordingly
+          //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithEmailAndPassword
+          //changevalidation methods
           console.log('error code: ', error.code);
           console.log('error message: ', error.message);
+          if (error.code === 'auth/invalid-email') {
+            this.setState({
+              emailError: 'Email must be in the form of: "* @ * . *"'
+            });
+          }
         }
       );
   };
@@ -75,9 +83,22 @@ class Register extends Component {
   };
 
   emailValidation = () => {
-    if (this.state.emailValid === false) {
+    const email = this.state.email;
+    if (email.length === 0) {
+      return null;
+    }
+    const regExpression = new RegExp(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+    const isEmailValid = regExpression.test(String(email).toLowerCase());
+
+    if (isEmailValid === false) {
       return 'error';
     }
+
+    // if (this.state.emailValid === false) {
+    //   return 'error';
+    // }
   };
 
   passwordValidation = () => {
