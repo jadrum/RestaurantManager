@@ -28,6 +28,7 @@ const renderApp = () => {
 /** Tracks user authentication **/
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
+    console.log('log in');
     store.dispatch(login(user.uid)); // sets user ID so render works
     store.dispatch(initDataAsync(user.uid)); // get initialize data
     renderApp(); // render that sh1t
@@ -36,6 +37,7 @@ firebase.auth().onAuthStateChanged(user => {
       history.push('/dashboard');
     }
   } else {
+    console.log('log out');
     store.dispatch(logout());
     renderApp();
     history.push('/'); // Sends user back to home page
