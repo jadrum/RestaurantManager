@@ -36,34 +36,93 @@ class Register extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props
-      .startRegisterUser({
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then(
-        user => {
-          this.props.addRestaurant({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email,
-            user: user.user.uid,
-            restaurant: this.state.restaurantName
-          });
-        },
-        error => {
-          //TODO need to handle specific errors and display accordingly
-          //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithEmailAndPassword
-          //changevalidation methods
-          console.log('error code: ', error.code);
-          console.log('error message: ', error.message);
-          if (error.code === 'auth/invalid-email') {
-            this.setState({
-              emailError: 'Email must be in the form of: "* @ * . *"'
-            });
-          }
-        }
+
+    //validate password function
+    const finalPasswordValidation = () => {
+      const password = this.state.password;
+      if (password.length === 0) {
+        return null;
+      }
+      const regExpression = new RegExp(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/
       );
+      const isPasswordValid = regExpression.test(String(password));
+
+      if (isPasswordValid === false) {
+        return 'error';
+      }
+    };
+
+    //validate email function
+    const finalEmailValidation = () => {
+      const email = this.state.email;
+      if (email.length === 0) {
+        return null;
+      }
+      const regExpression = new RegExp(
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+      const isEmailValid = regExpression.test(String(email).toLowerCase());
+
+      if (isEmailValid === false) {
+        return 'error';
+      }
+    };
+
+    //if both the password and email are valid then add it to the db
+    if (
+      finalPasswordValidation(this.state.password) !== 'error' ||
+      finalEmailValidation(this.state.email !== 'error')
+    ) {
+      this.props
+        .startRegisterUser({
+          email: this.state.email,
+          password: this.state.password
+        })
+        .then(
+          user => {
+            this.props.addRestaurant({
+              firstName: this.state.firstName,
+              lastName: this.state.lastName,
+              email: this.state.email,
+              user: user.user.uid,
+              restaurant: this.state.restaurantName
+            });
+          },
+          error => {
+            //TODO need to handle specific errors and display accordingly
+            //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithEmailAndPassword
+            //changevalidation methods
+            console.log('error code: ', error.code);
+            console.log('error message: ', error.message);
+            if (error.code === 'auth/invalid-email') {
+              this.setState({
+                emailError: 'Email must be in the form of: "* @ * . *"'
+              });
+            } else if (
+              error.code === 'auth/weak-password' ||
+              error.code === 'Password not valid'
+            ) {
+              this.setState({
+                passwordError:
+                  'Password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
+              });
+            }
+          }
+        );
+      //else if there is a password error then display that
+    } else if (finalPasswordValidation(this.state.password === 'error')) {
+      this.setState({
+        passwordError:
+          'Password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
+      });
+    }
+    //else that means it is an email error and display that
+    else {
+      this.setState({
+        emailError: 'Email must be in the form of: "* @ * . *"'
+      });
+    }
   };
 
   handleChange = event => {
@@ -102,9 +161,22 @@ class Register extends Component {
   };
 
   passwordValidation = () => {
-    if (this.state.passwordValid === false) {
+    const password = this.state.password;
+    if (password.length === 0) {
+      return null;
+    }
+    const regExpression = new RegExp(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/
+    );
+    const isPasswordValid = regExpression.test(String(password));
+
+    if (isPasswordValid === false) {
       return 'error';
     }
+
+    // if (this.state.passwordValid === false) {
+    //   return 'error';
+    // }
   };
 
   firstNameValidation = () => {
