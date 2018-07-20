@@ -39,7 +39,7 @@ class Register extends Component {
 
     //if both the password and email are valid then add it to the db
     if (
-      this.emailValidation() !== 'error' ||
+      this.emailValidation() !== 'error' &&
       this.passwordValidation() !== 'error'
     ) {
       this.props
@@ -59,36 +59,48 @@ class Register extends Component {
           },
           error => {
             //TODO need to handle specific errors and display accordingly
-            //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithEmailAndPassword
+            //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithemailAndpassword
             //changevalidation methods
             console.log('error code: ', error.code);
             console.log('error message: ', error.message);
             if (error.code === 'auth/invalid-email') {
               this.setState({
-                emailError: 'Email must be in the form of: "* @ * . *"'
+                emailError: 'email must be in the form of: "* @ * . *"'
               });
             } else if (
               error.code === 'auth/weak-password' ||
-              error.code === 'Password not valid'
+              error.code === 'password not valid'
             ) {
               this.setState({
                 passwordError:
-                  'Password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
+                  'password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
               });
             }
           }
         );
       //else if there is a password error then display that
-    } else if (this.passwordValidation() === 'error') {
+    } else if (
+      this.passwordValidation() === 'error' &&
+      this.emailValidation() === 'error'
+    ) {
       this.setState({
         passwordError:
-          'Password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
+          'password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character',
+        emailError: 'email must be in the form of: "* @ * . *"'
       });
     }
     //else that means it is an email error and display that
-    else {
+    else if (
+      this.passwordValidation() !== 'error' &&
+      this.emailValidation() === 'error'
+    ) {
       this.setState({
-        emailError: 'Email must be in the form of: "* @ * . *"'
+        emailError: 'email must be in the form of: "* @ * . *"'
+      });
+    } else {
+      this.setState({
+        passwordError:
+          'password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
       });
     }
   };
@@ -117,9 +129,9 @@ class Register extends Component {
     const regExpression = new RegExp(
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
-    const isEmailValid = regExpression.test(String(email).toLowerCase());
+    const isemailValid = regExpression.test(String(email).toLowerCase());
 
-    if (isEmailValid === false) {
+    if (isemailValid === false) {
       return 'error';
     }
   };
@@ -132,9 +144,9 @@ class Register extends Component {
     const regExpression = new RegExp(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/
     );
-    const isPasswordValid = regExpression.test(String(password));
+    const ispasswordValid = regExpression.test(String(password));
 
-    if (isPasswordValid === false) {
+    if (ispasswordValid === false) {
       return 'error';
     }
   };
@@ -186,7 +198,6 @@ class Register extends Component {
                   validationState={this.lastNameValidation()}
                   bsSize="large">
                   <FormControl
-                    autoFocus
                     type="text"
                     value={this.state.lastName}
                     onChange={this.handleChange}
@@ -204,7 +215,6 @@ class Register extends Component {
                   validationState={this.nameValidation()}
                   bsSize="large">
                   <FormControl
-                    autoFocus
                     type="text"
                     value={this.state.restaurantName}
                     onChange={this.handleChange}

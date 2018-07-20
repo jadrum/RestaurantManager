@@ -24,7 +24,7 @@ export const startRegisterUser = data => async dispatch => {
  * their corresponding admin account
  */
 export const addRestaurant = data => async dispatch => {
-  const { firstName, lastName, email, user, restaurant } = data;
+  const { user, restaurant } = data;
   let restaurantID = genRandomID();
   addToDb(RESTAURANTS, restaurantID, { name: restaurant }); // add restaurant to db
   let path = '/' + restaurantID + '/users/';

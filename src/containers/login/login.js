@@ -16,12 +16,12 @@ class Login extends Component {
     super(props, context);
 
     this.state = {
-      email: '',
-      emailError: '',
-      emailValid: true,
-      password: '',
-      passwordError: '',
-      passwordValid: true
+      loginEmail: '',
+      loginEmailError: '',
+      loginEmailValid: true,
+      loginPassword: '',
+      loginPasswordError: '',
+      loginPasswordValid: true
     };
   }
 
@@ -29,8 +29,8 @@ class Login extends Component {
     e.preventDefault();
     this.props
       .startLogin({
-        email: this.state.email,
-        password: this.state.password
+        email: this.state.loginEmail,
+        password: this.state.loginPassword
       })
       .then(
         user => {
@@ -38,8 +38,29 @@ class Login extends Component {
           console.log('user -- ', user.user.uid);
         },
         error => {
-          console.log('error code: ', error.code);
-          console.log('error message: ', error.message);
+          if (error.code === 'auth/invalid-email') {
+            this.setState({
+              loginEmailError: 'The email address entered is invalid.'
+            });
+            this.setState({ loginEmailValid: false });
+          } else if (error.code === 'auth/user-disabled') {
+            this.setState({
+              loginEmailError:
+                'The account associated with this email address is currently disabled.'
+            });
+            this.setState({ loginEmailValid: false });
+          } else if (error.code === 'auth/user-not-found') {
+            this.setState({
+              loginEmailError:
+                'There is no account found for the entered email address.'
+            });
+            this.setState({ loginEmailValid: false });
+          } else if (error.code === 'auth/wrong-password') {
+            this.setState({
+              loginEmailError: 'The password entered is invalid, try again.'
+            });
+            this.setState({ loginEmailValid: false });
+          }
         }
       );
   };
@@ -51,17 +72,19 @@ class Login extends Component {
   };
 
   validateForm = () => {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return (
+      this.state.loginEmail.length > 0 && this.state.loginPassword.length > 0
+    );
   };
 
-  emailValidation = () => {
-    if (this.state.emailValid === false) {
+  loginEmailValidation = () => {
+    if (this.state.loginEmailValid === false) {
       return 'error';
     }
   };
 
-  passwordValidation = () => {
-    if (this.state.passwordValid === false) {
+  loginPasswordValidation = () => {
+    if (this.state.loginPasswordValid === false) {
       return 'error';
     }
   };
@@ -72,13 +95,13 @@ class Login extends Component {
         <form onSubmit={this.handleSubmit}>
           <Col className="less-padding" xs={12} sm={5}>
             <FormGroup
-              controlId="email"
-              validationState={this.emailValidation()}
+              controlId="loginEmail"
+              validationState={this.loginEmailValidation()}
               bsSize="small">
               <FormControl
                 autoFocus
                 type="email"
-                value={this.state.email}
+                value={this.state.loginEmail}
                 onChange={this.handleChange}
                 placeholder="email"
                 required
@@ -86,26 +109,26 @@ class Login extends Component {
 
               <HelpBlock>
                 <Col sm={2} />
-                <Col sm={10}>{this.state.emailError}</Col>
+                <Col sm={10}>{this.state.loginEmailError}</Col>
               </HelpBlock>
             </FormGroup>
           </Col>
 
           <Col className="less-padding" xs={12} sm={5}>
             <FormGroup
-              controlId="password"
-              validationState={this.passwordValidation()}
+              controlId="loginPassword"
+              validationState={this.loginPasswordValidation()}
               bsSize="small">
               <FormControl
                 type="password"
-                value={this.state.password}
+                value={this.state.loginPassword}
                 onChange={this.handleChange}
                 placeholder="password"
                 required
               />
               <HelpBlock>
                 <Col sm={2} />
-                <Col sm={10}>{this.state.passwordError}</Col>
+                <Col sm={10}>{this.state.loginPasswordError}</Col>
               </HelpBlock>
             </FormGroup>
           </Col>
@@ -126,7 +149,4 @@ class Login extends Component {
   }
 }
 
-export default connect(
-  null,
-  { startLogin }
-)(Login);
+export default connect(null, { startLogin })(Login);

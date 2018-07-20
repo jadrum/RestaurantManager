@@ -1,6 +1,4 @@
-import generateRandomID from 'uuid/v4';
 import db from '../../firebase/firebase';
-import { getDb } from '../../firebase/firebase';
 
 export const FETCH_EMPLOYEES = 'admin/FETCH';
 
