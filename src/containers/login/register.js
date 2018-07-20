@@ -25,110 +25,102 @@ class Register extends Component {
       restaurantName: '',
       restaurantNameError: '',
       restaurantNameValid: true,
-      registerEmail: '',
-      registerEmailError: '',
-      registerEmailValid: true,
-      registerPassword: '',
-      registerPasswordError: '',
-      registerPasswordValid: true
+      email: '',
+      emailError: '',
+      emailValid: true,
+      password: '',
+      passwordError: '',
+      passwordValid: true
     };
   }
 
   handleSubmit = e => {
     e.preventDefault();
 
-    //validate registerPassword function
-    const finalregisterPasswordValidation = () => {
-      const registerPassword = this.state.registerPassword;
-      if (registerPassword.length === 0) {
+    //validate password function
+    const finalpasswordValidation = () => {
+      const password = this.state.password;
+      if (password.length === 0) {
         return null;
       }
       const regExpression = new RegExp(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/
       );
-      const isregisterPasswordValid = regExpression.test(
-        String(registerPassword)
-      );
+      const ispasswordValid = regExpression.test(String(password));
 
-      if (isregisterPasswordValid === false) {
+      if (ispasswordValid === false) {
         return 'error';
       }
     };
 
-    //validate registerEmail function
-    const finalregisterEmailValidation = () => {
-      const registerEmail = this.state.registerEmail;
-      if (registerEmail.length === 0) {
+    //validate email function
+    const finalemailValidation = () => {
+      const email = this.state.email;
+      if (email.length === 0) {
         return null;
       }
       const regExpression = new RegExp(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
-      const isregisterEmailValid = regExpression.test(
-        String(registerEmail).toLowerCase()
-      );
+      const isemailValid = regExpression.test(String(email).toLowerCase());
 
-      if (isregisterEmailValid === false) {
+      if (isemailValid === false) {
         return 'error';
       }
     };
 
-    //if both the registerPassword and registerEmail are valid then add it to the db
+    //if both the password and email are valid then add it to the db
     if (
-      finalregisterPasswordValidation(this.state.registerPassword) !==
-        'error' ||
-      finalregisterEmailValidation(this.state.registerEmail !== 'error')
+      finalpasswordValidation(this.state.password) !== 'error' ||
+      finalemailValidation(this.state.email !== 'error')
     ) {
       this.props
         .startRegisterUser({
-          registerEmail: this.state.registerEmail,
-          registerPassword: this.state.registerPassword
+          email: this.state.email,
+          password: this.state.password
         })
         .then(
           user => {
             this.props.addRestaurant({
               firstName: this.state.firstName,
               lastName: this.state.lastName,
-              registerEmail: this.state.registerEmail,
+              email: this.state.email,
               user: user.user.uid,
               restaurant: this.state.restaurantName
             });
           },
           error => {
             //TODO need to handle specific errors and display accordingly
-            //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithregisterEmailAndregisterPassword
+            //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithemailAndpassword
             //changevalidation methods
             console.log('error code: ', error.code);
             console.log('error message: ', error.message);
-            if (error.code === 'auth/invalid-registerEmail') {
+            if (error.code === 'auth/invalid-email') {
               this.setState({
-                registerEmailError:
-                  'registerEmail must be in the form of: "* @ * . *"'
+                emailError: 'email must be in the form of: "* @ * . *"'
               });
             } else if (
-              error.code === 'auth/weak-registerPassword' ||
-              error.code === 'registerPassword not valid'
+              error.code === 'auth/weak-password' ||
+              error.code === 'password not valid'
             ) {
               this.setState({
-                registerPasswordError:
-                  'registerPassword must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
+                passwordError:
+                  'password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
               });
             }
           }
         );
-      //else if there is a registerPassword error then display that
-    } else if (
-      finalregisterPasswordValidation(this.state.registerPassword === 'error')
-    ) {
+      //else if there is a password error then display that
+    } else if (finalpasswordValidation(this.state.password === 'error')) {
       this.setState({
-        registerPasswordError:
-          'registerPassword must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
+        passwordError:
+          'password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
       });
     }
-    //else that means it is an registerEmail error and display that
+    //else that means it is an email error and display that
     else {
       this.setState({
-        registerEmailError: 'registerEmail must be in the form of: "* @ * . *"'
+        emailError: 'email must be in the form of: "* @ * . *"'
       });
     }
   };
@@ -140,10 +132,7 @@ class Register extends Component {
   };
 
   validateForm = () => {
-    return (
-      this.state.registerEmail.length > 0 &&
-      this.state.registerPassword.length > 0
-    );
+    return this.state.email.length > 0 && this.state.password.length > 0;
   };
 
   nameValidation = () => {
@@ -152,44 +141,40 @@ class Register extends Component {
     }
   };
 
-  registerEmailValidation = () => {
-    const registerEmail = this.state.registerEmail;
-    if (registerEmail.length === 0) {
+  emailValidation = () => {
+    const email = this.state.email;
+    if (email.length === 0) {
       return null;
     }
     const regExpression = new RegExp(
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
-    const isregisterEmailValid = regExpression.test(
-      String(registerEmail).toLowerCase()
-    );
+    const isemailValid = regExpression.test(String(email).toLowerCase());
 
-    if (isregisterEmailValid === false) {
+    if (isemailValid === false) {
       return 'error';
     }
 
-    // if (this.state.registerEmailValid === false) {
+    // if (this.state.emailValid === false) {
     //   return 'error';
     // }
   };
 
-  registerPasswordValidation = () => {
-    const registerPassword = this.state.registerPassword;
-    if (registerPassword.length === 0) {
+  passwordValidation = () => {
+    const password = this.state.password;
+    if (password.length === 0) {
       return null;
     }
     const regExpression = new RegExp(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/
     );
-    const isregisterPasswordValid = regExpression.test(
-      String(registerPassword)
-    );
+    const ispasswordValid = regExpression.test(String(password));
 
-    if (isregisterPasswordValid === false) {
+    if (ispasswordValid === false) {
       return 'error';
     }
 
-    // if (this.state.registerPasswordValid === false) {
+    // if (this.state.passwordValid === false) {
     //   return 'error';
     // }
   };
@@ -241,7 +226,6 @@ class Register extends Component {
                   validationState={this.lastNameValidation()}
                   bsSize="large">
                   <FormControl
-                    autoFocus
                     type="text"
                     value={this.state.lastName}
                     onChange={this.handleChange}
@@ -259,7 +243,6 @@ class Register extends Component {
                   validationState={this.nameValidation()}
                   bsSize="large">
                   <FormControl
-                    autoFocus
                     type="text"
                     value={this.state.restaurantName}
                     onChange={this.handleChange}
@@ -273,36 +256,36 @@ class Register extends Component {
                 </FormGroup>
 
                 <FormGroup
-                  controlId="registerEmail"
-                  validationState={this.registerEmailValidation()}
+                  controlId="email"
+                  validationState={this.emailValidation()}
                   bsSize="large">
                   <FormControl
-                    type="registerEmail"
-                    value={this.state.registerEmail}
+                    type="email"
+                    value={this.state.email}
                     onChange={this.handleChange}
-                    placeholder="registerEmail"
+                    placeholder="email"
                     required
                   />
                   <HelpBlock>
                     <Col sm={2} />
-                    <Col sm={10}>{this.state.registerEmailError}</Col>
+                    <Col sm={10}>{this.state.emailError}</Col>
                   </HelpBlock>
                 </FormGroup>
 
                 <FormGroup
-                  controlId="registerPassword"
-                  validationState={this.registerPasswordValidation()}
+                  controlId="password"
+                  validationState={this.passwordValidation()}
                   bsSize="large">
                   <FormControl
-                    type="registerPassword"
-                    value={this.state.registerPassword}
+                    type="password"
+                    value={this.state.password}
                     onChange={this.handleChange}
-                    placeholder="registerPassword"
+                    placeholder="password"
                     required
                   />
                   <HelpBlock>
                     <Col sm={2} />
-                    <Col sm={10}>{this.state.registerPasswordError}</Col>
+                    <Col sm={10}>{this.state.passwordError}</Col>
                   </HelpBlock>
                 </FormGroup>
 
