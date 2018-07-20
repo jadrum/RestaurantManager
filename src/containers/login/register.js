@@ -37,42 +37,10 @@ class Register extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    //validate password function
-    const finalPasswordValidation = () => {
-      const password = this.state.password;
-      if (password.length === 0) {
-        return null;
-      }
-      const regExpression = new RegExp(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/
-      );
-      const isPasswordValid = regExpression.test(String(password));
-
-      if (isPasswordValid === false) {
-        return 'error';
-      }
-    };
-
-    //validate email function
-    const finalEmailValidation = () => {
-      const email = this.state.email;
-      if (email.length === 0) {
-        return null;
-      }
-      const regExpression = new RegExp(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-      const isEmailValid = regExpression.test(String(email).toLowerCase());
-
-      if (isEmailValid === false) {
-        return 'error';
-      }
-    };
-
     //if both the password and email are valid then add it to the db
     if (
-      finalPasswordValidation(this.state.password) !== 'error' ||
-      finalEmailValidation(this.state.email !== 'error')
+      this.emailValidation() !== 'error' ||
+      this.passwordValidation() !== 'error'
     ) {
       this.props
         .startRegisterUser({
@@ -111,7 +79,7 @@ class Register extends Component {
           }
         );
       //else if there is a password error then display that
-    } else if (finalPasswordValidation(this.state.password === 'error')) {
+    } else if (this.passwordValidation() === 'error') {
       this.setState({
         passwordError:
           'Password must have : Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
@@ -154,10 +122,6 @@ class Register extends Component {
     if (isEmailValid === false) {
       return 'error';
     }
-
-    // if (this.state.emailValid === false) {
-    //   return 'error';
-    // }
   };
 
   passwordValidation = () => {
@@ -173,10 +137,6 @@ class Register extends Component {
     if (isPasswordValid === false) {
       return 'error';
     }
-
-    // if (this.state.passwordValid === false) {
-    //   return 'error';
-    // }
   };
 
   firstNameValidation = () => {
