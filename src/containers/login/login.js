@@ -29,8 +29,8 @@ class Login extends Component {
     e.preventDefault();
     this.props
       .startLogin({
-        loginEmail: this.state.loginEmail,
-        loginPassword: this.state.loginPassword
+        email: this.state.loginEmail,
+        password: this.state.loginPassword
       })
       .then(
         user => {
@@ -38,8 +38,29 @@ class Login extends Component {
           console.log('user -- ', user.user.uid);
         },
         error => {
-          console.log('error code: ', error.code);
-          console.log('error message: ', error.message);
+          if (error.code === 'auth/invalid-email') {
+            this.setState({
+              loginEmailError: 'The email address entered is invalid.'
+            });
+            this.setState({ loginEmailValid: false });
+          } else if (error.code === 'auth/user-disabled') {
+            this.setState({
+              loginEmailError:
+                'The account associated with this email address is currently disabled.'
+            });
+            this.setState({ loginEmailValid: false });
+          } else if (error.code === 'auth/user-not-found') {
+            this.setState({
+              loginEmailError:
+                'There is no account found for the entered email address.'
+            });
+            this.setState({ loginEmailValid: false });
+          } else if (error.code === 'auth/wrong-password') {
+            this.setState({
+              loginEmailError: 'The password entered is invalid, try again.'
+            });
+            this.setState({ loginEmailValid: false });
+          }
         }
       );
   };
@@ -79,10 +100,10 @@ class Login extends Component {
               bsSize="small">
               <FormControl
                 autoFocus
-                type="loginEmail"
+                type="email"
                 value={this.state.loginEmail}
                 onChange={this.handleChange}
-                placeholder="loginEmail"
+                placeholder="email"
                 required
               />
 
@@ -99,10 +120,10 @@ class Login extends Component {
               validationState={this.loginPasswordValidation()}
               bsSize="small">
               <FormControl
-                type="loginPassword"
+                type="password"
                 value={this.state.loginPassword}
                 onChange={this.handleChange}
-                placeholder="loginPassword"
+                placeholder="password"
                 required
               />
               <HelpBlock>
