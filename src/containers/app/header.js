@@ -13,6 +13,9 @@ const Header = props => (
     <Navbar.Collapse>
       <Nav>
         <NavDropdown eventKey={1} title="Manage Menu" id="basic-nav-dropdown">
+          <MenuItem eventKey={1.1} href="manage-active-menu">
+            Active Menu
+          </MenuItem>
           <MenuItem eventKey={1.1} href="manage-drinks">
             Drinks
           </MenuItem>
@@ -21,6 +24,12 @@ const Header = props => (
           </MenuItem>
           <MenuItem eventKey={1.2} href="manage-desserts">
             Desserts
+          </MenuItem>
+          <MenuItem eventKey={1.2} href="manage-entrees">
+            Entrees
+          </MenuItem>
+          <MenuItem eventKey={1.2} href="manage-sides">
+            Sides
           </MenuItem>
         </NavDropdown>
       </Nav>

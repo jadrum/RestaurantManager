@@ -28,7 +28,7 @@ const renderApp = () => {
 /** Tracks user authentication **/
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    console.log('log in');
+    console.log('log in', user.uid);
     store.dispatch(login(user.uid)); // sets user ID so render works
     store.dispatch(initDataAsync(user.uid)); // get initialize data
     renderApp(); // render that sh1t

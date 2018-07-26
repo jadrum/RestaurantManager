@@ -7,6 +7,7 @@ import Home from '../login';
 import Dashboard from '../dashboard';
 import About from '../about';
 import ManageMenuItems from '../manage';
+import ManageActiveMenu from '../manage/activeMenu';
 
 const AppRouter = () => (
   <Router history={history}>
@@ -14,6 +15,11 @@ const AppRouter = () => (
       <PublicRoute exact path="/" component={Home} />
       <PrivateRoute exact path="/dashboard" component={Dashboard} />
       <PrivateRoute exact path="/about-us" component={About} />
+      <PrivateRoute
+        exact
+        path="/manage-active-menu"
+        component={ManageActiveMenu}
+      />
       <PrivateRoute
         exact
         path="/manage-drinks"
@@ -30,6 +36,18 @@ const AppRouter = () => (
         exact
         path="/manage-desserts"
         menuItem="/desserts"
+        component={ManageMenuItems}
+      />
+      <PrivateRoute
+        exact
+        path="/manage-entrees"
+        menuItem="/entrees"
+        component={ManageMenuItems}
+      />
+      <PrivateRoute
+        exact
+        path="/manage-sides"
+        menuItem="/sides"
         component={ManageMenuItems}
       />
     </Switch>
