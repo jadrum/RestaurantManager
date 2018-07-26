@@ -22,8 +22,19 @@ const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 /**
  * FIREBASE INTERACTION FUNCTIONS FOR DB AND STORAGE
  */
+
+//creates second instance of firebase to stop signout error
+const secondInstance = (email, password) => {
+  const secondaryApp = firebase.initializeApp(FirebaseConfig, 'secondaryApp');
+  var detachedAuth = secondaryApp.auth();
+
+  detachedAuth.createUserWithEmailAndPassword(email, password);
+  secondaryApp.delete();
+};
+
 const addToDb = (path, name, data) => {
-  db.ref(path)
+  db
+    .ref(path)
     .child(name)
     .set(data); // still upload the drink
 };
@@ -33,7 +44,8 @@ const updateDb = (path, name, data) => {
 };
 
 const removeDb = (path, name, cb) => {
-  db.ref(path)
+  db
+    .ref(path)
     .child(name)
     .remove()
     .then(cb)
@@ -107,6 +119,7 @@ const fbTaskHandler = (task, errorCB, completeCB) => {
 
 export {
   firebase,
+  secondInstance,
   drinks,
   appetizers,
   desserts,

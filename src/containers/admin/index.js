@@ -1,8 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Glyphicon, Grid, Panel, Row } from 'react-bootstrap';
+import { Button, Glyphicon, Grid, Modal, Panel, Row } from 'react-bootstrap';
 import ListEmployees from './listEmployees';
+import AddEmployee from './AddEmployee';
 
 class ManageEmployees extends Component {
   constructor(props, context) {
@@ -31,6 +32,10 @@ class ManageEmployees extends Component {
       comp = (
         <div>
           <Grid>
+            <AddEmployee
+              showAdd={this.state.showAddModal}
+              closeAdd={this.closeAdd}
+            />
             <Row className="admin-index_rows">
               <Panel bsStyle="primary">
                 <div className="panel-heading">

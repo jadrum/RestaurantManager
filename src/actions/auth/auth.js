@@ -1,5 +1,10 @@
 import generateRandomID from 'uuid/v4';
-import { firebase, addToDb, getDb } from '../../firebase/firebase';
+import {
+  firebase,
+  addToDb,
+  getDb,
+  secondInstance
+} from '../../firebase/firebase';
 import { LOGIN, INITDATA, LOGOUT } from '../../reducers/auth/auth';
 
 /* Gen random id for images */
@@ -14,9 +19,10 @@ const USERS = 'users';
  * restaurant and the link to the user
  */
 export const startRegisterUser = data => async dispatch => {
-  return firebase
-    .auth()
-    .createUserWithEmailAndPassword(data.email, data.password);
+  secondInstance(data.email, data.password);
+  // return firebase
+  //   .auth()
+  //   .createUserWithEmailAndPassword(data.email, data.password);
 };
 
 /**
@@ -38,6 +44,33 @@ export const addRestaurant = data => async dispatch => {
   let uData = {
     restaurant: restaurantID,
     clearance: 'ADMIN'
+  };
+  addToDb(USERS, user, uData); // add user to the user object on root of db
+};
+
+//add an employee to the authentication section of database
+export const startEmployeeRegisterUser = data => async dispatch => {
+  return firebase
+    .auth()
+    .createUserWithEmailAndPassword(data.email, data.password);
+};
+
+//adds an employee to a restaurant
+export const addNewEmployee = data => async dispatch => {
+  const { user, rid } = data;
+  // let restaurantID = rid
+  // addToDb(RESTAURANTS, restaurantID, { name: restaurant }); // add restaurant to db
+  let path = '/' + rid + '/users/';
+  let rData = {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    clearance: data.clearance
+  };
+  addToDb(RESTAURANTS + path, user, rData); // add user to restaurant
+  let uData = {
+    restaurant: rid,
+    clearance: data.clearance
   };
   addToDb(USERS, user, uData); // add user to the user object on root of db
 };
