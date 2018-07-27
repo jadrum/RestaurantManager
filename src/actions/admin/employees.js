@@ -1,6 +1,7 @@
 import db from '../../firebase/firebase';
 import {
   addToDb,
+  removeDb,
   secondInstance,
   initSecondFirebase,
   deleteSecondFirebase
@@ -23,6 +24,7 @@ export const startEmployeeRegisterUser = data => async dispatch => {
           lastName: data.lastName,
           email: data.email,
           user: user.user.uid,
+          uid: user.user.uid,
           clearance: data.clearance,
           //not sure how to exactly access this
           rid: data.rid
@@ -50,7 +52,8 @@ export const addNewEmployee = data => async dispatch => {
     firstName: data.firstName,
     lastName: data.lastName,
     email: data.email,
-    clearance: data.clearance
+    clearance: data.clearance,
+    uid: user
   };
   addToDb(RESTAURANTS + path, user, rData); // add user to restaurant
   let uData = {
@@ -58,6 +61,20 @@ export const addNewEmployee = data => async dispatch => {
     clearance: data.clearance
   };
   addToDb(USERS, user, uData); // add user to the user object on root of db
+};
+
+const getPath = (rid, uid) => ({
+  dbPath: 'restaurants/' + rid + uid
+});
+
+//remove an employee
+export const removeEmployee = (rid, uid, data) => async dispatch => {
+  let dbPath = getPath(rid, uid); // get path names
+  // if (data.imageRef) {
+  //   removeStorage(storagePath, data.imageRef, data.name);
+  // }
+  console.log('path: ', dbPath);
+  removeDb(dbPath, data.firstName);
 };
 
 export const fetchEmployees = (rid, item) => async dispatch => {

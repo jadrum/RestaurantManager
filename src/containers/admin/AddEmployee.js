@@ -19,6 +19,7 @@ class AddEmployee extends Component {
     super(props, context);
 
     this.state = {
+      uid: '',
       firstName: '',
       firstnameError: '',
       firstNameValid: true,
@@ -47,8 +48,10 @@ class AddEmployee extends Component {
         firstName: this.state.firstName,
         lastName: this.state.lastName,
         clearance: this.state.clearance,
-        rid: this.props.rid
+        rid: this.props.rid,
+        uid: ''
       });
+      this.props.closeAdd();
     } else {
       {
         this.setState({
@@ -263,10 +266,7 @@ class AddEmployee extends Component {
 
 const mapStateToProps = state => ({ rid: state.auth.rid });
 
-export default connect(
-  mapStateToProps,
-  {
-    startEmployeeRegisterUser,
-    addNewEmployee
-  }
-)(AddEmployee);
+export default connect(mapStateToProps, {
+  startEmployeeRegisterUser,
+  addNewEmployee
+})(AddEmployee);

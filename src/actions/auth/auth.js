@@ -1,5 +1,12 @@
 import generateRandomID from 'uuid/v4';
-import { firebase, addToDb, getDb } from '../../firebase/firebase';
+import {
+  firebase,
+  addToDb,
+  getDb,
+  secondInstance,
+  initSecondFirebase,
+  deleteSecondFirebase
+} from '../../firebase/firebase';
 import { LOGIN, INITDATA, LOGOUT } from '../../reducers/auth/auth';
 
 /* Gen random id for images */
@@ -38,6 +45,56 @@ export const addRestaurant = data => async dispatch => {
   let uData = {
     restaurant: restaurantID,
     clearance: 'ADMIN'
+  };
+  addToDb(USERS, user, uData); // add user to the user object on root of db
+};
+
+//add an employee to the authentication section of database
+export const startEmployeeRegisterUser = (data, cb) => async dispatch => {
+  //get firebase secondInstance
+  let secondaryApp = initSecondFirebase();
+
+  //create the second instance
+  secondInstance(secondaryApp, data.email, data.password).then(
+    user => {
+      cb({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        user: user.user.uid,
+        clearance: data.clearance,
+        uid: user,
+        //not sure how to exactly access this
+        rid: data.rid
+      });
+
+      deleteSecondFirebase(secondaryApp);
+    },
+    error => {
+      console.log('error code: ', error.code);
+      console.log('error message: ', error.message);
+      deleteSecondFirebase(secondaryApp);
+    }
+  );
+};
+
+//adds an employee to a restaurant
+export const addNewEmployee = data => async dispatch => {
+  console.log('Add new employee');
+  const { user, rid } = data;
+  // let restaurantID = rid
+  // addToDb(RESTAURANTS, restaurantID, { name: restaurant }); // add restaurant to db
+  let path = '/' + rid + '/users/';
+  let rData = {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+    clearance: data.clearance
+  };
+  addToDb(RESTAURANTS + path, user, rData); // add user to restaurant
+  let uData = {
+    restaurant: rid,
+    clearance: data.clearance
   };
   addToDb(USERS, user, uData); // add user to the user object on root of db
 };

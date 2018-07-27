@@ -1,8 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../../actions/admin/employees';
-import { Col, Grid, Row, Table } from 'react-bootstrap';
+import { removeEmployee, fetchEmployees } from '../../actions/admin/employees';
+import { Button, Col, Glyphicon, Grid, Row, Table } from 'react-bootstrap';
 
 class ListEmployees extends Component {
   componentWillMount() {
@@ -10,7 +10,9 @@ class ListEmployees extends Component {
   }
 
   renderItems = (employee, i) => {
-    console.log(employee);
+    const { removeEmployee, rid, showUpdate } = this.props;
+    const uid = employee.uid;
+    console.log(uid);
     return (
       <tr key={i}>
         <td>{i + 1}</td>
@@ -18,6 +20,15 @@ class ListEmployees extends Component {
         <td>{employee.lastName}</td>
         <td>{employee.email}</td>
         <td>{employee.clearance}</td>
+        <td>
+          <div className="btn-group pull-left">
+            <Button
+              bsSize="xsmall"
+              onClick={() => removeEmployee(rid, uid, employee)}>
+              <Glyphicon glyph="trash" />
+            </Button>
+          </div>
+        </td>
       </tr>
     );
   };
@@ -59,7 +70,6 @@ const mapStateToProps = state => ({
   employees: state.admin.employees
 });
 
-export default connect(
-  mapStateToProps,
-  { fetchEmployees }
-)(ListEmployees);
+export default connect(mapStateToProps, { fetchEmployees, removeEmployee })(
+  ListEmployees
+);
