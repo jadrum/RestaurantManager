@@ -24,7 +24,7 @@ class ListEmployees extends Component {
           <div className="btn-group pull-left">
             <Button
               bsSize="xsmall"
-              onClick={() => removeEmployee(rid, uid, employee)}>
+              onClick={() => removeEmployee(rid, 'users', employee)}>
               <Glyphicon glyph="trash" />
             </Button>
           </div>

@@ -63,18 +63,18 @@ export const addNewEmployee = data => async dispatch => {
   addToDb(USERS, user, uData); // add user to the user object on root of db
 };
 
-const getPath = (rid, uid) => ({
-  dbPath: 'restaurants/' + rid + uid
+const getPath = (rid, users) => ({
+  dbPath: 'restaurants/' + rid + '/' + users
 });
 
 //remove an employee
-export const removeEmployee = (rid, uid, data) => async dispatch => {
-  let dbPath = getPath(rid, uid); // get path names
+export const removeEmployee = (rid, users, data) => async dispatch => {
+  let dbPath = getPath(rid, users); // get path names
   // if (data.imageRef) {
   //   removeStorage(storagePath, data.imageRef, data.name);
   // }
-  console.log('path: ', dbPath);
-  removeDb(dbPath, data.firstName);
+  dbPath = dbPath.dbPath;
+  removeDb(dbPath, data.uid);
 };
 
 export const fetchEmployees = (rid, item) => async dispatch => {
