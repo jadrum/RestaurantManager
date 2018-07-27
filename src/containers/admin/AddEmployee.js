@@ -12,7 +12,7 @@ import {
 import {
   startEmployeeRegisterUser,
   addNewEmployee
-} from '../../actions/auth/auth';
+} from '../../actions/admin/employees';
 
 class AddEmployee extends Component {
   constructor(props, context) {
@@ -41,17 +41,14 @@ class AddEmployee extends Component {
     e.preventDefault();
 
     if (this.emailValidation() !== 'error') {
-      this.props.startEmployeeRegisterUser(
-        {
-          email: this.state.email,
-          password: this.state.password,
-          firstName: this.state.firstName,
-          lastName: this.state.lastName,
-          clearance: this.state.clearance,
-          rid: this.props.rid
-        },
-        addNewEmployee()
-      );
+      this.props.startEmployeeRegisterUser({
+        email: this.state.email,
+        password: this.state.password,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        clearance: this.state.clearance,
+        rid: this.props.rid
+      });
     } else {
       {
         this.setState({
@@ -266,7 +263,10 @@ class AddEmployee extends Component {
 
 const mapStateToProps = state => ({ rid: state.auth.rid });
 
-export default connect(mapStateToProps, {
-  startEmployeeRegisterUser,
-  addNewEmployee
-})(AddEmployee);
+export default connect(
+  mapStateToProps,
+  {
+    startEmployeeRegisterUser,
+    addNewEmployee
+  }
+)(AddEmployee);
