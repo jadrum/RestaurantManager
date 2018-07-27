@@ -3,7 +3,9 @@ import {
   firebase,
   addToDb,
   getDb,
-  secondInstance
+  secondInstance,
+  initSecondFirebase,
+  deleteSecondFirebase
 } from '../../firebase/firebase';
 import { LOGIN, INITDATA, LOGOUT } from '../../reducers/auth/auth';
 
@@ -19,10 +21,9 @@ const USERS = 'users';
  * restaurant and the link to the user
  */
 export const startRegisterUser = data => async dispatch => {
-  secondInstance(data.email, data.password);
-  // return firebase
-  //   .auth()
-  //   .createUserWithEmailAndPassword(data.email, data.password);
+  return firebase
+    .auth()
+    .createUserWithEmailAndPassword(data.email, data.password);
 };
 
 /**
@@ -49,14 +50,36 @@ export const addRestaurant = data => async dispatch => {
 };
 
 //add an employee to the authentication section of database
-export const startEmployeeRegisterUser = data => async dispatch => {
-  return firebase
-    .auth()
-    .createUserWithEmailAndPassword(data.email, data.password);
+export const startEmployeeRegisterUser = (data, cb) => async dispatch => {
+  //get firebase secondInstance
+  let secondaryApp = initSecondFirebase();
+
+  //create the second instance
+  secondInstance(secondaryApp, data.email, data.password).then(
+    user => {
+      cb({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        user: user.user.uid,
+        clearance: data.clearance,
+        //not sure how to exactly access this
+        rid: data.rid
+      });
+
+      deleteSecondFirebase(secondaryApp);
+    },
+    error => {
+      console.log('error code: ', error.code);
+      console.log('error message: ', error.message);
+      deleteSecondFirebase(secondaryApp);
+    }
+  );
 };
 
 //adds an employee to a restaurant
 export const addNewEmployee = data => async dispatch => {
+  console.log('Add new employee ', data);
   const { user, rid } = data;
   // let restaurantID = rid
   // addToDb(RESTAURANTS, restaurantID, { name: restaurant }); // add restaurant to db

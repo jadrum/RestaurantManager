@@ -13,7 +13,6 @@ import {
   startEmployeeRegisterUser,
   addNewEmployee
 } from '../../actions/auth/auth';
-import { secondInstance } from '../../firebase/firebase';
 
 class AddEmployee extends Component {
   constructor(props, context) {
@@ -41,46 +40,67 @@ class AddEmployee extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    //if the email is valid then add it to the db
     if (this.emailValidation() !== 'error') {
-      this.props
-        .secondInstance({
+      this.props.startEmployeeRegisterUser(
+        {
           email: this.state.email,
-          password: this.state.password
-        })
-        .then(
-          user => {
-            this.props.addNewEmployee({
-              firstName: this.state.firstName,
-              lastName: this.state.lastName,
-              email: this.state.email,
-              user: user.user.uid,
-              clearance: this.state.clearance,
-              //not sure how to exactly access this
-              rid: this.props.rid
-            });
-          },
-          error => {
-            //TODO need to handle specific errors and display accordingly
-            //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithemailAndpassword
-            //changevalidation methods
-            console.log('error code: ', error.code);
-            console.log('error message: ', error.message);
-            if (error.code === 'auth/invalid-email') {
-              this.setState({
-                emailError: 'email must be in the form of: "* @ * . *"'
-              });
-            } else {
-            }
-          }
-        );
-      //else if there is a email error then display that
+          password: this.state.password,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName,
+          clearance: this.state.clearance,
+          rid: this.props.rid
+        },
+        addNewEmployee()
+      );
     } else {
-      this.setState({
-        emailError: 'email must be in the form of: "* @ * . *"'
-      });
+      {
+        this.setState({
+          emailError: 'email must be in the form of: "* @ * . *"'
+        });
+      }
     }
   };
+
+  //if the email is valid then add it to the db
+  //   if (this.emailValidation() !== 'error') {
+  //     this.props
+  //       .startEmployeeRegisterUser({
+  //         email: this.state.email,
+  //         password: this.state.password
+  //       })
+  //       .then(
+  //         user => {
+  //           this.props.addNewEmployee({
+  //             firstName: this.state.firstName,
+  //             lastName: this.state.lastName,
+  //             email: this.state.email,
+  //             user: user.user.uid,
+  //             clearance: this.state.clearance,
+  //             //not sure how to exactly access this
+  //             rid: this.props.rid
+  //           });
+  //         },
+  //         error => {
+  //           //TODO need to handle specific errors and display accordingly
+  //           //https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#createUserWithemailAndpassword
+  //           //changevalidation methods
+  //           console.log('error code: ', error.code);
+  //           console.log('error message: ', error.message);
+  //           if (error.code === 'auth/invalid-email') {
+  //             this.setState({
+  //               emailError: 'email must be in the form of: "* @ * . *"'
+  //             });
+  //           } else {
+  //           }
+  //         }
+  //       );
+  //     //else if there is a email error then display that
+  //   } else {
+  //     this.setState({
+  //       emailError: 'email must be in the form of: "* @ * . *"'
+  //     });
+  //   }
+  // };
 
   handleChange = event => {
     this.setState({
@@ -247,7 +267,6 @@ class AddEmployee extends Component {
 const mapStateToProps = state => ({ rid: state.auth.rid });
 
 export default connect(mapStateToProps, {
-  secondInstance,
   startEmployeeRegisterUser,
   addNewEmployee
 })(AddEmployee);

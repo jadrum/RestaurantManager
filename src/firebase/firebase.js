@@ -23,13 +23,29 @@ const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
  * FIREBASE INTERACTION FUNCTIONS FOR DB AND STORAGE
  */
 
-//creates second instance of firebase to stop signout error
-const secondInstance = (email, password) => {
+//initialize second secondInstance
+const initSecondFirebase = () => {
+  console.log('initSecondFirebase');
+  //init
   const secondaryApp = firebase.initializeApp(FirebaseConfig, 'secondaryApp');
-  var detachedAuth = secondaryApp.auth();
+  //return it
+  return secondaryApp;
+};
 
-  detachedAuth.createUserWithEmailAndPassword(email, password);
-  secondaryApp.delete();
+//creates second instance of firebase to stop signout error
+const secondInstance = (firebaseApp, email, password) => {
+  console.log('secondInstance');
+  //get auth instance
+  var detachedAuth = firebaseApp.auth();
+  //create and return the user
+  return detachedAuth.createUserWithEmailAndPassword(email, password);
+};
+
+//delete the new instance
+const deleteSecondFirebase = firebaseApp => {
+  console.log('deleteSecondFirebase');
+  //delete
+  firebaseApp.delete();
 };
 
 const addToDb = (path, name, data) => {
@@ -119,7 +135,9 @@ const fbTaskHandler = (task, errorCB, completeCB) => {
 
 export {
   firebase,
+  initSecondFirebase,
   secondInstance,
+  deleteSecondFirebase,
   drinks,
   appetizers,
   desserts,
