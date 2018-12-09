@@ -23,28 +23,27 @@ const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
  * FIREBASE EVENT LISTENERS
  */
 // child removed
-db.ref('drinks').on('child_removed', snapshot => {
-  console.log('removed: ', snapshot.key, snapshot.val());
-});
-
-// child changed
-db.ref('drinks').on('child_changed', snapshot => {
-  console.log('updated: ', snapshot.key, snapshot.val());
-});
-
-// child added
-db.ref('drinks').on('child_added', snapshot => {
-  console.log('added: ', snapshot.key, snapshot.val());
-});
+// db.ref('drinks').on('child_removed', snapshot => {
+//   console.log('removed: ', snapshot.key, snapshot.val());
+// });
+//
+// // child changed
+// db.ref('drinks').on('child_changed', snapshot => {
+//   console.log('updated: ', snapshot.key, snapshot.val());
+// });
+//
+// // child added
+// db.ref('drinks').on('child_added', snapshot => {
+//   console.log('added: ', snapshot.key, snapshot.val());
+// });
 
 /**
  * FIREBASE INTERACTION FUNCTIONS FOR DB AND STORAGE
  */
 const addToDb = (path, name, data) => {
-  db
-    .ref(path)
+  db.ref(path)
     .child(name)
-    .set(data); // still upload the drink
+    .set(data); // still upload the data
 };
 
 const updateDb = (path, name, data) => {
@@ -52,8 +51,7 @@ const updateDb = (path, name, data) => {
 };
 
 const removeDb = (path, name, cb) => {
-  db
-    .ref(path)
+  db.ref(path)
     .child(name)
     .remove()
     .then(cb)

@@ -9,8 +9,7 @@ import {
   getFbUrl,
   fbTaskHandler
 } from '../../firebase/firebase';
-
-export const FETCH_ITEMS = 'items/FETCH';
+import { FETCH_ITEMS, FETCH_MENU, FETCH_LABELS } from '../types';
 
 /* Gen random id for images */
 const genRandomFilename = (): string => generateRandomID();
@@ -87,10 +86,35 @@ export const updateItem = data => async dispatch => {
   }
 };
 
+export const addLabel = (rid, label) => async dispatch => {
+  let { dbPath } = getPath(rid, '/menu-labels');
+  let labelName = genRandomFilename();
+  addToDb(dbPath, labelName, label); // initially store labels as empty strings
+};
+
+export const fetchLabels = rid => async dispatch => {
+  let { dbPath } = getPath(rid, '/menu-labels');
+  db.ref(dbPath).on('value', snapshot => {
+    dispatch({
+      type: FETCH_LABELS,
+      payload: snapshot.val()
+    });
+  });
+};
+
 export const fetchItems = (rid, item) => async dispatch => {
   db.ref('restaurants/' + rid + item).on('value', snapshot => {
     dispatch({
       type: FETCH_ITEMS,
+      payload: snapshot.val()
+    });
+  });
+};
+
+export const fetchMenu = rid => async dispatch => {
+  db.ref('restaurants/' + rid + '/menu').on('value', snapshot => {
+    dispatch({
+      type: FETCH_MENU,
       payload: snapshot.val()
     });
   });
